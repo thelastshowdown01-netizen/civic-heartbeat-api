@@ -11,6 +11,7 @@ import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
 import ReportIssue from "./pages/ReportIssue";
 import ExploreIssues from "./pages/ExploreIssues";
+import IssueDetails from "./pages/IssueDetails";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
