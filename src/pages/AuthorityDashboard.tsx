@@ -141,7 +141,7 @@ export default function AuthorityDashboard() {
       <DashboardLayout title="Department Work Queue" icon={<Building2 className="h-5 w-5" />}>
         <div className="space-y-6">
           <Skeleton className="h-10 w-64" />
-          <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
+          <div className="card-grid-5">
             {Array.from({ length: 5 }).map((_, i) => <Skeleton key={i} className="h-24" />)}
           </div>
         </div>
@@ -152,27 +152,14 @@ export default function AuthorityDashboard() {
   return (
     <DashboardLayout title="Department Work Queue" icon={<Building2 className="h-5 w-5" />}>
       <div className="space-y-6">
-        {/* Subtitle */}
-        <p className="text-sm text-muted-foreground">
+        <p className="page-description">
           Manage assigned civic issues, update progress, and move toward resolution.
         </p>
 
         {/* Stats */}
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
+        <div className="card-grid-5">
           {statCards.map((card) => (
-            <Card key={card.label}>
-              <CardContent className="p-4 flex flex-col gap-2">
-                <div className={`flex items-center gap-2 ${card.accent ?? "text-muted-foreground"}`}>
-                  {card.icon}
-                  <span className="text-xs font-medium truncate">{card.label}</span>
-                </div>
-                {isLoading ? (
-                  <Skeleton className="h-8 w-16" />
-                ) : (
-                  <span className="text-2xl font-bold text-foreground">{card.value}</span>
-                )}
-              </CardContent>
-            </Card>
+            <StatCard key={card.label} {...card} loading={isLoading} />
           ))}
         </div>
 
