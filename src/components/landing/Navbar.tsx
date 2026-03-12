@@ -5,7 +5,7 @@ import { useUnreadCount } from "@/hooks/useNotifications";
 import { Button } from "@/components/ui/button";
 
 const Navbar = () => {
-  const { user, loading, signOut, userRole } = useAuth();
+  const { user, loading, signOut, userRole, roleLoading } = useAuth();
   const { data: unreadCount } = useUnreadCount();
 
   return (
