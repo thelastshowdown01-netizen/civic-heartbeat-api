@@ -158,9 +158,8 @@ export default function IssueDetails() {
   // Loading
   if (issueLoading) {
     return (
-      <div className="min-h-screen bg-background">
-        <Navbar />
-        <main className="max-w-5xl mx-auto px-4 pt-24 pb-16">
+      <PublicLayout>
+        <div>
           <Skeleton className="h-8 w-48 mb-4" />
           <Skeleton className="h-10 w-3/4 mb-3" />
           <div className="flex gap-2 mb-6">
