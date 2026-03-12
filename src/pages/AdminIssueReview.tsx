@@ -217,8 +217,8 @@ export default function AdminIssueReview() {
     : null;
 
   return (
-    <div className="min-h-screen bg-background">
-      <main className="max-w-6xl mx-auto px-4 pt-8 pb-16">
+    <DashboardLayout title="Issue Review">
+      <div className="max-w-6xl mx-auto">
         {/* Back link */}
         <Link
           to="/admin"
