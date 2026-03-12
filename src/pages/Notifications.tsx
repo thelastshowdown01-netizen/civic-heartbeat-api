@@ -157,25 +157,20 @@ const Notifications = () => {
 
         {/* Summary Cards */}
         {isLoading ? (
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div className="card-grid-4">
             {Array.from({ length: 4 }).map((_, i) => (
               <Skeleton key={i} className="h-24 rounded-lg" />
             ))}
           </div>
         ) : (
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div className="card-grid-4">
             {summaryCards.map((c) => (
-              <Card key={c.label}>
-                <CardHeader className="p-4 pb-2 flex-row items-center gap-2 space-y-0">
-                  <c.icon className={`h-4 w-4 ${c.color}`} />
-                  <CardTitle className="text-xs font-medium text-muted-foreground">
-                    {c.label}
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="p-4 pt-0">
-                  <p className="text-2xl font-bold text-foreground">{c.value}</p>
-                </CardContent>
-              </Card>
+              <StatCard
+                key={c.label}
+                label={c.label}
+                value={c.value}
+                icon={<c.icon className={`h-4 w-4 ${c.color}`} />}
+              />
             ))}
           </div>
         )}
