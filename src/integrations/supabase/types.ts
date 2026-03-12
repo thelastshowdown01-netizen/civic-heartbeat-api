@@ -324,6 +324,7 @@ export type Database = {
         | "assigned"
         | "in_progress"
         | "resolved"
+        | "rejected"
       priority_label: "low" | "medium" | "high"
       vote_type: "up" | "down"
     }
@@ -469,6 +470,7 @@ export const Constants = {
         "assigned",
         "in_progress",
         "resolved",
+        "rejected",
       ],
       priority_label: ["low", "medium", "high"],
       vote_type: ["up", "down"],
