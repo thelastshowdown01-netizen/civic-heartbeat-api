@@ -78,7 +78,7 @@ export default {
           },
           to: {
             height: "0",
-          },
+          },  
         },
       },
       animation: {
