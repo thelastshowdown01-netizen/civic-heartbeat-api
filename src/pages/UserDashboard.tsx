@@ -221,25 +221,18 @@ export default function UserDashboard() {
               </div>
             ) : filteredReports.length === 0 ? (
               reports && reports.length === 0 ? (
-                /* True empty state */
-                <Card className="border-dashed">
-                  <CardContent className="py-16 text-center space-y-4">
-                    <div className="mx-auto w-14 h-14 rounded-full bg-muted flex items-center justify-center">
-                      <FileText className="h-7 w-7 text-muted-foreground" />
-                    </div>
-                    <div>
-                      <h3 className="font-semibold text-foreground text-lg">No reports yet</h3>
-                      <p className="text-sm text-muted-foreground mt-1 max-w-sm mx-auto">
-                        You haven't reported any civic issues yet. Start by reporting a problem in your area to make it visible and trackable.
-                      </p>
-                    </div>
+                <EmptyState
+                  icon={<FileText className="h-7 w-7 text-muted-foreground" />}
+                  title="No reports yet"
+                  description="You haven't reported any civic issues yet. Start by reporting a problem in your area to make it visible and trackable."
+                  action={
                     <Link to="/report">
-                      <Button className="gap-1.5 mt-2">
+                      <Button className="gap-1.5">
                         <Plus className="h-4 w-4" /> Report an Issue
                       </Button>
                     </Link>
-                  </CardContent>
-                </Card>
+                  }
+                />
               ) : (
                 /* Filter empty state */
                 <Card>
