@@ -131,6 +131,7 @@ export type Database = {
           is_read: boolean
           issue_id: string | null
           message: string
+          type: string | null
           user_id: string
         }
         Insert: {
@@ -139,6 +140,7 @@ export type Database = {
           is_read?: boolean
           issue_id?: string | null
           message: string
+          type?: string | null
           user_id: string
         }
         Update: {
@@ -147,6 +149,7 @@ export type Database = {
           is_read?: boolean
           issue_id?: string | null
           message?: string
+          type?: string | null
           user_id?: string
         }
         Relationships: [
@@ -300,6 +303,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      get_dashboard_stats: { Args: never; Returns: Json }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
