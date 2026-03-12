@@ -15,6 +15,7 @@ import IssueDetails from "./pages/IssueDetails";
 import AdminDashboard from "./pages/AdminDashboard";
 import AdminIssueReview from "./pages/AdminIssueReview";
 import UserDashboard from "./pages/UserDashboard";
+import Notifications from "./pages/Notifications";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
