@@ -138,9 +138,8 @@ export default function AuthorityDashboard() {
 
   if (authLoading || (!user && !authLoading)) {
     return (
-      <>
-        <Navbar />
-        <div className="max-w-7xl mx-auto px-4 py-8 space-y-6">
+      <DashboardLayout title="Department Work Queue" icon={<Building2 className="h-5 w-5" />}>
+        <div className="space-y-6">
           <Skeleton className="h-10 w-64" />
           <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
             {Array.from({ length: 5 }).map((_, i) => <Skeleton key={i} className="h-24" />)}
