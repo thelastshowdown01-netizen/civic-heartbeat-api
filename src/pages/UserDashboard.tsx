@@ -128,7 +128,12 @@ export default function UserDashboard() {
     if (!reports) return [];
     let result = [...reports];
 
-    if (statusFilter !== "all") result = result.filter((r) => r.issues.status === statusFilter);
+    // "active" card: exclude resolved/rejected
+    if (activeCard === "active") {
+      result = result.filter((r) => !["resolved", "rejected"].includes(r.issues.status));
+    } else {
+      if (statusFilter !== "all") result = result.filter((r) => r.issues.status === statusFilter);
+    }
     if (categoryFilter !== "all") result = result.filter((r) => r.issues.category === categoryFilter);
     if (priorityFilter !== "all") result = result.filter((r) => r.issues.priority === priorityFilter);
 
@@ -144,7 +149,7 @@ export default function UserDashboard() {
     }
 
     return result;
-  }, [reports, statusFilter, categoryFilter, priorityFilter, sortBy]);
+  }, [reports, statusFilter, categoryFilter, priorityFilter, sortBy, activeCard]);
 
   const recentNotifications = (notifications ?? []).slice(0, 5);
 
