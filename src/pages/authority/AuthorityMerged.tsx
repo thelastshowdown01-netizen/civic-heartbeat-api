@@ -102,7 +102,7 @@ export default function AuthorityMerged() {
   }
 
   return (
-    <DashboardLayout title="Merged Issues" icon={<ClipboardList className="h-5 w-5" />}>
+    <PublicLayout>
       <div className="space-y-4">
         <p className="text-sm text-muted-foreground">
           Issues reported by multiple citizens that were automatically merged based on location and description similarity.
