@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { formatDistanceToNow } from "date-fns";
 import { ThumbsUp, ThumbsDown, MapPin, Users, Clock, Building2 } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
