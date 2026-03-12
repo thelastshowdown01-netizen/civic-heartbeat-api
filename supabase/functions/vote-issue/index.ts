@@ -81,7 +81,7 @@ Deno.serve(async (req) => {
     const { data: existingVote } = await adminClient
       .from("votes")
       .select("vote_type")
-      .eq("user_id", user.id)
+      .eq("user_id", userId)
       .eq("issue_id", issue_id)
       .maybeSingle();
 
