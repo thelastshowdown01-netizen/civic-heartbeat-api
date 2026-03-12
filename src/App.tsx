@@ -14,6 +14,7 @@ import ExploreIssues from "./pages/ExploreIssues";
 import IssueDetails from "./pages/IssueDetails";
 import AdminDashboard from "./pages/AdminDashboard";
 import AdminIssueReview from "./pages/AdminIssueReview";
+import UserDashboard from "./pages/UserDashboard";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
