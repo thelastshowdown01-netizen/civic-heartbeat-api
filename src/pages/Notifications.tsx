@@ -42,11 +42,7 @@ const Notifications = () => {
   const markAllAsRead = useMarkAllAsRead();
   const [filter, setFilter] = useState<"all" | "unread">("all");
 
-  // Redirect if not logged in
-  if (!authLoading && !user) {
-    navigate("/login");
-    return null;
-  }
+  const shouldRedirect = !authLoading && !user;
 
   const filtered = useMemo(() => {
     if (!notifications) return [];
