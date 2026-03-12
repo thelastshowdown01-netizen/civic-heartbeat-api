@@ -124,9 +124,8 @@ export default function UserDashboard() {
 
   if (authLoading || !user) {
     return (
-      <>
-        <Navbar />
-        <div className="max-w-6xl mx-auto px-4 py-8 space-y-6">
+      <PublicLayout>
+        <div className="space-y-6">
           <Skeleton className="h-10 w-48" />
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
             {Array.from({ length: 4 }).map((_, i) => <Skeleton key={i} className="h-24" />)}
