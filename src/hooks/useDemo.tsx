@@ -5,7 +5,6 @@ import { toast } from "sonner";
 
 const DEMO_ACCOUNTS = {
   citizen: { email: "citizen1@demo.sustaincity.in", password: "DemoPass123!", home: "/dashboard" },
-  admin: { email: "admin@demo.sustaincity.in", password: "DemoPass123!", home: "/admin" },
   authority: { email: "authority@demo.sustaincity.in", password: "DemoPass123!", home: "/authority" },
 } as const;
 

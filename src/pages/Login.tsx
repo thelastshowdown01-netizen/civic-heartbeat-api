@@ -34,8 +34,7 @@ const Login = () => {
         .eq("user_id", data.user.id)
         .maybeSingle();
       const role = roleData?.role ?? "citizen";
-      if (role === "admin") navigate("/admin");
-      else if (role === "authority") navigate("/authority");
+      if (role === "authority") navigate("/authority");
       else navigate("/dashboard");
     }
   };
@@ -79,7 +78,7 @@ const Login = () => {
           <CardDescription className="text-xs uppercase tracking-wide">Quick Demo Access</CardDescription>
         </CardHeader>
         <CardContent className="flex gap-2 justify-center pb-4">
-          {(["citizen", "admin", "authority"] as const).map((role) => (
+          {(["citizen", "authority"] as const).map((role) => (
             <Button key={role} variant="outline" size="sm" className="text-xs capitalize" onClick={() => { sessionStorage.setItem("demo_mode", "true"); switchRole(role); }}>
               {role}
             </Button>

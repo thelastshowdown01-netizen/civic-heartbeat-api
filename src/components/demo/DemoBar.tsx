@@ -1,11 +1,10 @@
 import { useDemo } from "@/hooks/useDemo";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { X, User, Shield, Landmark, Home, FileText, Search, Bell, LayoutDashboard } from "lucide-react";
+import { X, User, Landmark, Home, FileText, Search, Bell, LayoutDashboard } from "lucide-react";
 
 const ROLES = [
   { key: "citizen" as const, label: "Citizen", icon: User, color: "bg-emerald-500" },
-  { key: "admin" as const, label: "Admin", icon: Shield, color: "bg-amber-500" },
   { key: "authority" as const, label: "Authority", icon: Landmark, color: "bg-blue-500" },
 ];
 
@@ -15,7 +14,6 @@ const NAV_LINKS = [
   { path: "/issues", label: "Explore", icon: Search },
   { path: "/dashboard", label: "My Reports", icon: LayoutDashboard },
   { path: "/notifications", label: "Notifications", icon: Bell },
-  { path: "/admin", label: "Admin", icon: Shield },
   { path: "/authority", label: "Authority", icon: Landmark },
 ];
 

@@ -23,9 +23,11 @@ const Navbar = () => {
           </a>
            {loading ? null : user ? (
             <>
-              <Link to="/dashboard" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors hidden sm:inline">
-                My Reports
-              </Link>
+              {userRole !== "authority" && (
+                <Link to="/dashboard" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors hidden sm:inline">
+                  My Reports
+                </Link>
+              )}
               <Link to="/notifications" className="relative text-muted-foreground hover:text-foreground transition-colors">
                 <Bell className="h-4.5 w-4.5" />
                 {(unreadCount ?? 0) > 0 && (
@@ -34,14 +36,9 @@ const Navbar = () => {
                   </span>
                 )}
               </Link>
-              {userRole === "admin" && (
-                <Link to="/admin" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors hidden sm:inline">
-                  Admin
-                </Link>
-              )}
               {userRole === "authority" && (
                 <Link to="/authority" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors hidden sm:inline">
-                  Work Queue
+                  Dashboard
                 </Link>
               )}
               <span className="text-xs text-muted-foreground hidden md:inline border border-border rounded-full px-2 py-0.5">
