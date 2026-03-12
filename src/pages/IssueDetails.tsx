@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { format, formatDistanceToNow } from "date-fns";
 import {
@@ -23,12 +23,12 @@ import PublicLayout from "@/components/layouts/PublicLayout";
 import { EmptyState } from "@/components/ui/empty-state";
 
 const NEXT_STEPS: Record<string, string> = {
-  reported: "This issue is awaiting verification by a city official. Once verified, it will be assigned to the relevant department.",
-  verified: "This issue has been verified and will soon be assigned to the responsible authority or department.",
-  assigned: "An authority has been assigned. Work is expected to begin shortly.",
-  in_progress: "The assigned authority is actively working on resolving this issue.",
+  reported: "This issue is awaiting verification by the responsible authority. Once verified, work will begin on resolving it.",
+  verified: "This issue has been verified and the responsible department is preparing to address it.",
+  assigned: "A department has been assigned. Work is expected to begin shortly.",
+  in_progress: "The responsible authority is actively working on resolving this issue.",
   resolved: "This issue has been resolved. Thank you to everyone who reported and supported it.",
-  rejected: "This issue was reviewed and rejected by an administrator. See notes for details.",
+  rejected: "This issue was reviewed and could not be verified. See notes for details.",
 };
 
 export default function IssueDetails() {
@@ -283,7 +283,7 @@ export default function IssueDetails() {
             <Card>
               <CardHeader className="pb-3">
                 <CardTitle className="text-base flex items-center gap-2">
-                  <Building2 className="h-4 w-4 text-muted-foreground" /> Assigned Authority
+                  <Building2 className="h-4 w-4 text-muted-foreground" /> Responsible Authority
                 </CardTitle>
               </CardHeader>
               <CardContent>
@@ -291,7 +291,7 @@ export default function IssueDetails() {
                   <p className="text-sm font-medium text-foreground">{issue.authority_name}</p>
                 ) : (
                   <p className="text-sm text-muted-foreground italic">
-                    No authority assigned yet — this issue is awaiting review and assignment.
+                    The responsible department will review this issue shortly.
                   </p>
                 )}
               </CardContent>
