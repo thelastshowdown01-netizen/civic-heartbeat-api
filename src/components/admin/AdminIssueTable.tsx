@@ -88,8 +88,8 @@ export default function AdminIssueTable({ issues, onAction }: AdminIssueTablePro
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end">
                     <DropdownMenuItem asChild>
-                      <Link to={`/issues/${issue.id}`} className="flex items-center gap-2">
-                        <Eye className="h-4 w-4" /> View Details
+                      <Link to={`/admin/issues/${issue.id}`} className="flex items-center gap-2">
+                        <Eye className="h-4 w-4" /> Review Issue
                       </Link>
                     </DropdownMenuItem>
                     <DropdownMenuSeparator />
