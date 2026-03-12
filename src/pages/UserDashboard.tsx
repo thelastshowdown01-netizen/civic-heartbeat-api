@@ -132,14 +132,13 @@ export default function UserDashboard() {
           </div>
           <Skeleton className="h-64 w-full" />
         </div>
-      </>
+      </PublicLayout>
     );
   }
 
   return (
-    <>
-      <Navbar />
-      <main className="max-w-6xl mx-auto px-4 py-8 space-y-6">
+    <PublicLayout>
+      <div className="space-y-6">
         {/* Header */}
         <div className="flex items-start justify-between gap-4">
           <div className="flex items-center gap-3">
