@@ -28,8 +28,9 @@ interface DashboardLayoutProps {
 }
 
 const authorityNavItems = [
-  { to: "/authority", label: "Dashboard", icon: LayoutDashboard },
-  { to: "/issues", label: "Explore Issues", icon: Search },
+  { to: "/authority", label: "Reports", icon: FileText },
+  { to: "/authority/feed", label: "Live Feed", icon: Activity },
+  { to: "/authority/merged", label: "Merged Issues", icon: ClipboardList },
 ];
 
 function DashboardSidebar() {
