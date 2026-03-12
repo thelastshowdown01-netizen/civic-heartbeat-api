@@ -13,6 +13,7 @@ import ReportIssue from "./pages/ReportIssue";
 import ExploreIssues from "./pages/ExploreIssues";
 import IssueDetails from "./pages/IssueDetails";
 import AdminDashboard from "./pages/AdminDashboard";
+import AuthorityDashboard from "./pages/AuthorityDashboard";
 import AdminIssueReview from "./pages/AdminIssueReview";
 import UserDashboard from "./pages/UserDashboard";
 import Notifications from "./pages/Notifications";
@@ -39,6 +40,7 @@ const App = () => (
             <Route path="/issues" element={<ExploreIssues />} />
             <Route path="/issues/:id" element={<IssueDetails />} />
             <Route path="/admin" element={<AdminDashboard />} />
+            <Route path="/authority" element={<AuthorityDashboard />} />
             <Route path="/admin/issues/:id" element={<AdminIssueReview />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />

@@ -39,6 +39,11 @@ const Navbar = () => {
                   Admin
                 </Link>
               )}
+              {userRole === "authority" && (
+                <Link to="/authority" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors hidden sm:inline">
+                  Work Queue
+                </Link>
+              )}
               <span className="text-xs text-muted-foreground hidden md:inline border border-border rounded-full px-2 py-0.5">
                 {userRole}
               </span>
