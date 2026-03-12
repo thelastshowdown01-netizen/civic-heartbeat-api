@@ -22,7 +22,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { categoryLabels, formatCategory, formatStatus } from "@/lib/issueHelpers";
 import IssueCard from "@/components/issues/IssueCard";
-import Navbar from "@/components/landing/Navbar";
+import PublicLayout from "@/components/layouts/PublicLayout";
 import type { Database } from "@/integrations/supabase/types";
 
 type IssueCategory = Database["public"]["Enums"]["issue_category"];
