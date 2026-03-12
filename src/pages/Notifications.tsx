@@ -145,9 +145,8 @@ const Notifications = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background">
-      <Navbar />
-      <main className="max-w-4xl mx-auto px-4 py-8 space-y-8">
+    <PublicLayout>
+      <div className="max-w-4xl mx-auto space-y-8">
         {/* Header */}
         <div>
           <h1 className="text-2xl font-bold text-foreground">Updates Center</h1>
