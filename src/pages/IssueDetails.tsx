@@ -20,10 +20,7 @@ import {
 import StatusTimeline from "@/components/issues/StatusTimeline";
 import PublicLayout from "@/components/layouts/PublicLayout";
 
-const categoryIcons: Record<string, string> = {
-  pothole: "🕳️", garbage: "🗑️", sewer_overflow: "🚰", water_leakage: "💧",
-  street_light: "💡", road_damage: "🚧", other: "📋",
-};
+import { EmptyState } from "@/components/ui/empty-state";
 
 const NEXT_STEPS: Record<string, string> = {
   reported: "This issue is awaiting verification by a city official. Once verified, it will be assigned to the relevant department.",
