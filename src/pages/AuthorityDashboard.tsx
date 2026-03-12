@@ -340,7 +340,7 @@ export default function AuthorityDashboard() {
             </Table>
           </div>
         )}
-      </main>
+      </div>
 
       {/* Progress Update Dialog */}
       <Dialog open={updateDialogOpen} onOpenChange={(open) => {
