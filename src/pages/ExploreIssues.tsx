@@ -105,10 +105,8 @@ export default function ExploreIssues() {
   };
 
   return (
-    <div className="min-h-screen bg-background">
-      <Navbar />
-
-      <main className="max-w-6xl mx-auto px-4 pt-24 pb-16">
+    <PublicLayout>
+      <div>
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-3xl md:text-4xl font-bold text-foreground tracking-tight">
