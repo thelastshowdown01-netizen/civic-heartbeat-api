@@ -11,6 +11,7 @@ import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
 import ReportIssue from "./pages/ReportIssue";
 import ExploreIssues from "./pages/ExploreIssues";
+import IssueDetails from "./pages/IssueDetails";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -30,6 +31,7 @@ const App = () => (
             <Route path="/reset-password" element={<ResetPassword />} />
             <Route path="/report" element={<ReportIssue />} />
             <Route path="/issues" element={<ExploreIssues />} />
+            <Route path="/issues/:id" element={<IssueDetails />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
