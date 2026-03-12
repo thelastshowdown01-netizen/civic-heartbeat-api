@@ -196,7 +196,7 @@ export default function AdminIssueReview() {
 
   if (!issue) {
     return (
-      <DashboardLayout>
+      <DashboardLayout title="Issue Not Found">
         <div className="flex flex-col items-center justify-center gap-4 py-20">
           <AlertTriangle className="h-12 w-12 text-muted-foreground" />
           <h2 className="text-xl font-semibold">Issue Not Found</h2>
