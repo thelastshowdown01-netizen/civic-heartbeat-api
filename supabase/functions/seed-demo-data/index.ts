@@ -19,7 +19,7 @@ Deno.serve(async (req) => {
 
     // Always ensure demo user roles exist (even if issues data exists)
     const demoRoleEmails = [
-      { email: "admin@demo.sustaincity.in", role: "admin" },
+      { email: "admin@demo.sustaincity.in", role: "authority" },
       { email: "authority@demo.sustaincity.in", role: "authority" },
       { email: "authority2@demo.sustaincity.in", role: "authority" },
       { email: "citizen1@demo.sustaincity.in", role: "citizen" },
