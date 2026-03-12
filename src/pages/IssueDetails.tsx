@@ -174,17 +174,16 @@ export default function IssueDetails() {
             </div>
             <Skeleton className="h-80 rounded-lg" />
           </div>
-        </main>
-      </div>
+        </div>
+      </PublicLayout>
     );
   }
 
   // Not found
   if (!issue) {
     return (
-      <div className="min-h-screen bg-background">
-        <Navbar />
-        <main className="max-w-5xl mx-auto px-4 pt-24 pb-16 flex flex-col items-center justify-center text-center py-32">
+      <PublicLayout>
+        <div className="flex flex-col items-center justify-center text-center py-32">
           <div className="w-16 h-16 rounded-full bg-muted flex items-center justify-center mb-4">
             <AlertTriangle className="h-7 w-7 text-muted-foreground" />
           </div>
