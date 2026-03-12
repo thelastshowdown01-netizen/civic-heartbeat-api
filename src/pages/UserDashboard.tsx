@@ -64,6 +64,37 @@ export default function UserDashboard() {
   const [categoryFilter, setCategoryFilter] = useState("all");
   const [priorityFilter, setPriorityFilter] = useState("all");
   const [sortBy, setSortBy] = useState("latest");
+  const [activeCard, setActiveCard] = useState<string | null>(null);
+
+  const handleStatClick = (card: string) => {
+    if (activeCard === card) {
+      // Toggle off
+      setActiveCard(null);
+      setStatusFilter("all");
+      setPriorityFilter("all");
+      return;
+    }
+    setActiveCard(card);
+    setCategoryFilter("all");
+    setSortBy("latest");
+    switch (card) {
+      case "active":
+        setStatusFilter("all");
+        setPriorityFilter("all");
+        break;
+      case "resolved":
+        setStatusFilter("resolved");
+        setPriorityFilter("all");
+        break;
+      case "high":
+        setStatusFilter("all");
+        setPriorityFilter("high");
+        break;
+      default:
+        setStatusFilter("all");
+        setPriorityFilter("all");
+    }
+  };
 
   // Fetch user's reports with joined issue data
   const { data: reports, isLoading } = useQuery({
