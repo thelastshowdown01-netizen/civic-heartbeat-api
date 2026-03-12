@@ -194,16 +194,14 @@ export default function IssueDetails() {
           <Button asChild variant="outline">
             <Link to="/issues"><ArrowLeft className="h-4 w-4 mr-2" /> Back to Issues</Link>
           </Button>
-        </main>
-      </div>
+        </div>
+      </PublicLayout>
     );
   }
 
   return (
-    <div className="min-h-screen bg-background">
-      <Navbar />
-
-      <main className="max-w-5xl mx-auto px-4 pt-24 pb-16">
+    <PublicLayout>
+      <div className="max-w-5xl mx-auto">
         {/* Back link */}
         <Link
           to="/issues"
