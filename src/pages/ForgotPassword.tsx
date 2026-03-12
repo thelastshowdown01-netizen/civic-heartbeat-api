@@ -6,6 +6,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { toast } from "sonner";
+import { MailCheck } from "lucide-react";
+import AuthLayout from "@/components/auth/AuthLayout";
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState("");
@@ -28,14 +30,15 @@ const ForgotPassword = () => {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background p-4">
-      <Card className="w-full max-w-md">
+    <AuthLayout>
+      <Card className="w-full max-w-md border-border/50 shadow-lg">
         <CardHeader className="text-center">
           <CardTitle className="text-2xl font-bold">Reset Password</CardTitle>
           <CardDescription>Enter your email to receive a reset link</CardDescription>
         </CardHeader>
         {sent ? (
-          <CardContent className="text-center space-y-4">
+          <CardContent className="text-center space-y-4 py-8">
+            <MailCheck className="mx-auto h-12 w-12 text-primary" />
             <p className="text-muted-foreground">Check your email for the reset link.</p>
             <Link to="/login" className="text-primary hover:underline text-sm">Back to login</Link>
           </CardContent>
@@ -56,7 +59,7 @@ const ForgotPassword = () => {
           </form>
         )}
       </Card>
-    </div>
+    </AuthLayout>
   );
 };
 
