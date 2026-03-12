@@ -23,9 +23,11 @@ interface AdminIssueTableProps {
 export default function AdminIssueTable({ issues, onAction }: AdminIssueTableProps) {
   if (issues.length === 0) {
     return (
-      <div className="text-center py-12 text-muted-foreground">
-        No issues found matching your filters.
-      </div>
+      <EmptyState
+        icon={<SearchX className="h-6 w-6 text-muted-foreground" />}
+        title="No issues found"
+        description="No issues match your current filters. Try adjusting your search criteria."
+      />
     );
   }
 

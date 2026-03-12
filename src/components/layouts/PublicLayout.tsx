@@ -226,6 +226,25 @@ const PublicLayout = ({ children, fullWidth }: PublicLayoutProps) => {
           {children}
         </main>
       )}
+
+      {/* Footer */}
+      <footer className="border-t border-border bg-card mt-auto">
+        <div className="max-w-6xl mx-auto px-4 py-8">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+            <div className="flex items-center gap-2">
+              <span className="text-lg font-bold text-primary">🏙️ Sustain City</span>
+              <span className="text-xs text-muted-foreground">— Civic Issue Resolution Platform</span>
+            </div>
+            <div className="flex items-center gap-6 text-sm text-muted-foreground">
+              <Link to="/issues" className="hover:text-foreground transition-colors">Explore Issues</Link>
+              <Link to="/report" className="hover:text-foreground transition-colors">Report Issue</Link>
+            </div>
+            <p className="text-xs text-muted-foreground">
+              © {new Date().getFullYear()} Sustain City. Built for better cities.
+            </p>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 };

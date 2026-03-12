@@ -71,9 +71,11 @@ const HeroSection = () => {
 
           <div className="flex flex-col sm:flex-row gap-3 justify-center md:justify-start mb-8">
             {user ? (
-              <Button size="lg" className="gap-2 text-base px-8">
-                Report an Issue <ArrowRight className="h-4 w-4" />
-              </Button>
+              <Link to="/report">
+                <Button size="lg" className="gap-2 text-base px-8">
+                  Report an Issue <ArrowRight className="h-4 w-4" />
+                </Button>
+              </Link>
             ) : (
               <Link to="/signup">
                 <Button size="lg" className="gap-2 text-base px-8">

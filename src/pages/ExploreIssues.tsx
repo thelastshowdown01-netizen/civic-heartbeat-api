@@ -279,21 +279,19 @@ export default function ExploreIssues() {
 
         {/* Empty state */}
         {!isLoading && data && data.issues.length === 0 && (
-          <div className="flex flex-col items-center justify-center py-20 text-center">
-            <div className="w-16 h-16 rounded-full bg-muted flex items-center justify-center mb-4">
-              <AlertTriangle className="h-7 w-7 text-muted-foreground" />
-            </div>
-            <h3 className="text-lg font-semibold text-foreground mb-1">No issues found</h3>
-            <p className="text-sm text-muted-foreground max-w-sm mb-6">
-              No civic issues match your current filters. Try a different pincode or category, or report a new issue in your area.
-            </p>
-            <div className="flex gap-3">
-              <Button variant="outline" onClick={clearFilters}>Clear Filters</Button>
-              <Button asChild>
-                <Link to="/report">Report an Issue</Link>
-              </Button>
-            </div>
-          </div>
+          <EmptyState
+            icon={<Search className="h-6 w-6 text-muted-foreground" />}
+            title="No issues found"
+            description="No civic issues match your current filters. Try a different pincode or category, or report a new issue in your area."
+            action={
+              <div className="flex gap-3">
+                <Button variant="outline" onClick={clearFilters}>Clear Filters</Button>
+                <Button asChild>
+                  <Link to="/report">Report an Issue</Link>
+                </Button>
+              </div>
+            }
+          />
         )}
       </div>
     </PublicLayout>
