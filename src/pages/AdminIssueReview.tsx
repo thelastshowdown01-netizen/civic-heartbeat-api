@@ -178,8 +178,8 @@ export default function AdminIssueReview() {
 
   if (issueLoading) {
     return (
-      <div className="min-h-screen bg-background">
-        <main className="max-w-6xl mx-auto px-4 pt-8 pb-16">
+      <DashboardLayout>
+        <div className="max-w-6xl mx-auto">
           <Skeleton className="h-6 w-40 mb-6" />
           <Skeleton className="h-10 w-3/4 mb-4" />
           <div className="grid lg:grid-cols-3 gap-6">
@@ -189,8 +189,8 @@ export default function AdminIssueReview() {
             </div>
             <Skeleton className="h-96 rounded-lg" />
           </div>
-        </main>
-      </div>
+        </div>
+      </DashboardLayout>
     );
   }
 
