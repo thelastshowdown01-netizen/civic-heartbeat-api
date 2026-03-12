@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { format } from "date-fns";
-import { MoreHorizontal, Eye, CheckCircle, UserPlus, Play, XCircle, Award } from "lucide-react";
+import { MoreHorizontal, Eye, CheckCircle, UserPlus, Play, XCircle, Award, SearchX } from "lucide-react";
+import { EmptyState } from "@/components/ui/empty-state";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -22,9 +23,11 @@ interface AdminIssueTableProps {
 export default function AdminIssueTable({ issues, onAction }: AdminIssueTableProps) {
   if (issues.length === 0) {
     return (
-      <div className="text-center py-12 text-muted-foreground">
-        No issues found matching your filters.
-      </div>
+      <EmptyState
+        icon={<SearchX className="h-6 w-6 text-muted-foreground" />}
+        title="No issues found"
+        description="No issues match your current filters. Try adjusting your search criteria."
+      />
     );
   }
 

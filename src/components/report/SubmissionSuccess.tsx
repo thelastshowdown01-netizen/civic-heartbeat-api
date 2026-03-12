@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { CheckCircle2, Eye, Plus, GitMerge } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -40,9 +41,11 @@ const SubmissionSuccess = ({ actionTaken, issueId, matchReason, onReportAnother 
         </div>
 
         <div className="flex flex-col sm:flex-row gap-3 justify-center pt-2">
-          <Button variant="default" className="gap-2" onClick={() => window.location.href = `/#issues`}>
-            <Eye className="w-4 h-4" />
-            Explore Issues
+          <Button asChild variant="default" className="gap-2">
+            <Link to="/issues">
+              <Eye className="w-4 h-4" />
+              Explore Issues
+            </Link>
           </Button>
           <Button variant="outline" className="gap-2" onClick={onReportAnother}>
             <Plus className="w-4 h-4" />
