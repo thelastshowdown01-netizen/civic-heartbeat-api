@@ -12,7 +12,7 @@ import {
   useMarkAsRead,
   useMarkAllAsRead,
 } from "@/hooks/useNotifications";
-import Navbar from "@/components/landing/Navbar";
+import PublicLayout from "@/components/layouts/PublicLayout";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -145,9 +145,8 @@ const Notifications = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background">
-      <Navbar />
-      <main className="max-w-4xl mx-auto px-4 py-8 space-y-8">
+    <PublicLayout>
+      <div className="max-w-4xl mx-auto space-y-8">
         {/* Header */}
         <div>
           <h1 className="text-2xl font-bold text-foreground">Updates Center</h1>
@@ -251,8 +250,8 @@ const Notifications = () => {
             {renderGroup("Earlier", grouped.earlier)}
           </div>
         )}
-      </main>
-    </div>
+      </div>
+    </PublicLayout>
   );
 };
 

@@ -6,6 +6,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import ReportForm from "@/components/report/ReportForm";
 import SubmissionSuccess from "@/components/report/SubmissionSuccess";
+import PublicLayout from "@/components/layouts/PublicLayout";
 
 const steps = [
   { icon: GitMerge, label: "Similar issues merged", desc: "Duplicate reports are combined automatically." },
@@ -36,20 +37,20 @@ const ReportIssue = () => {
 
   if (result) {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center px-4 py-16">
+      <PublicLayout>
         <SubmissionSuccess
           actionTaken={result.action_taken}
           issueId={result.issue_id}
           matchReason={result.duplicate_match_reason}
           onReportAnother={() => setResult(null)}
         />
-      </div>
+      </PublicLayout>
     );
   }
 
   return (
-    <div className="min-h-screen bg-background">
-      <div className="max-w-6xl mx-auto px-4 py-12 md:py-16">
+    <PublicLayout>
+      <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="mb-10 max-w-2xl">
           <h1 className="text-3xl md:text-4xl font-bold text-foreground tracking-tight">Report a Civic Issue</h1>
@@ -97,7 +98,7 @@ const ReportIssue = () => {
           </div>
         </div>
       </div>
-    </div>
+    </PublicLayout>
   );
 };
 

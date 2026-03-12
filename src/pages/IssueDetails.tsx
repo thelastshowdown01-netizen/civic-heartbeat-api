@@ -18,7 +18,7 @@ import {
   formatCategory, formatStatus, statusColors, priorityColors,
 } from "@/lib/issueHelpers";
 import StatusTimeline from "@/components/issues/StatusTimeline";
-import Navbar from "@/components/landing/Navbar";
+import PublicLayout from "@/components/layouts/PublicLayout";
 
 const categoryIcons: Record<string, string> = {
   pothole: "🕳️", garbage: "🗑️", sewer_overflow: "🚰", water_leakage: "💧",
@@ -158,9 +158,8 @@ export default function IssueDetails() {
   // Loading
   if (issueLoading) {
     return (
-      <div className="min-h-screen bg-background">
-        <Navbar />
-        <main className="max-w-5xl mx-auto px-4 pt-24 pb-16">
+      <PublicLayout>
+        <div>
           <Skeleton className="h-8 w-48 mb-4" />
           <Skeleton className="h-10 w-3/4 mb-3" />
           <div className="flex gap-2 mb-6">
@@ -175,17 +174,16 @@ export default function IssueDetails() {
             </div>
             <Skeleton className="h-80 rounded-lg" />
           </div>
-        </main>
-      </div>
+        </div>
+      </PublicLayout>
     );
   }
 
   // Not found
   if (!issue) {
     return (
-      <div className="min-h-screen bg-background">
-        <Navbar />
-        <main className="max-w-5xl mx-auto px-4 pt-24 pb-16 flex flex-col items-center justify-center text-center py-32">
+      <PublicLayout>
+        <div className="flex flex-col items-center justify-center text-center py-32">
           <div className="w-16 h-16 rounded-full bg-muted flex items-center justify-center mb-4">
             <AlertTriangle className="h-7 w-7 text-muted-foreground" />
           </div>
@@ -196,16 +194,14 @@ export default function IssueDetails() {
           <Button asChild variant="outline">
             <Link to="/issues"><ArrowLeft className="h-4 w-4 mr-2" /> Back to Issues</Link>
           </Button>
-        </main>
-      </div>
+        </div>
+      </PublicLayout>
     );
   }
 
   return (
-    <div className="min-h-screen bg-background">
-      <Navbar />
-
-      <main className="max-w-5xl mx-auto px-4 pt-24 pb-16">
+    <PublicLayout>
+      <div className="max-w-5xl mx-auto">
         {/* Back link */}
         <Link
           to="/issues"
@@ -420,7 +416,7 @@ export default function IssueDetails() {
             </Card>
           </div>
         </div>
-      </main>
-    </div>
+      </div>
+    </PublicLayout>
   );
 }

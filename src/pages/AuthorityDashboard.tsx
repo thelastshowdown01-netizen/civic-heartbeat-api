@@ -6,7 +6,7 @@ import { format, formatDistanceToNow } from "date-fns";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
-import Navbar from "@/components/landing/Navbar";
+import DashboardLayout from "@/components/layouts/DashboardLayout";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -138,34 +138,24 @@ export default function AuthorityDashboard() {
 
   if (authLoading || (!user && !authLoading)) {
     return (
-      <>
-        <Navbar />
-        <div className="max-w-7xl mx-auto px-4 py-8 space-y-6">
+      <DashboardLayout title="Department Work Queue" icon={<Building2 className="h-5 w-5" />}>
+        <div className="space-y-6">
           <Skeleton className="h-10 w-64" />
           <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
             {Array.from({ length: 5 }).map((_, i) => <Skeleton key={i} className="h-24" />)}
           </div>
         </div>
-      </>
+      </DashboardLayout>
     );
   }
 
   return (
-    <>
-      <Navbar />
-      <main className="max-w-7xl mx-auto px-4 py-8 space-y-6">
-        {/* Header */}
-        <div className="flex items-center gap-3">
-          <div className="p-2 rounded-lg bg-primary/10">
-            <Building2 className="h-6 w-6 text-primary" />
-          </div>
-          <div>
-            <h1 className="text-2xl font-bold text-foreground">Department Work Queue</h1>
-            <p className="text-sm text-muted-foreground">
-              Manage assigned civic issues, update progress, and move toward resolution.
-            </p>
-          </div>
-        </div>
+    <DashboardLayout title="Department Work Queue" icon={<Building2 className="h-5 w-5" />}>
+      <div className="space-y-6">
+        {/* Subtitle */}
+        <p className="text-sm text-muted-foreground">
+          Manage assigned civic issues, update progress, and move toward resolution.
+        </p>
 
         {/* Stats */}
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
@@ -350,7 +340,7 @@ export default function AuthorityDashboard() {
             </Table>
           </div>
         )}
-      </main>
+      </div>
 
       {/* Progress Update Dialog */}
       <Dialog open={updateDialogOpen} onOpenChange={(open) => {
@@ -379,6 +369,6 @@ export default function AuthorityDashboard() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
-    </>
+    </DashboardLayout>
   );
 }

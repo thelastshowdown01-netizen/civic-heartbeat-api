@@ -9,7 +9,7 @@ import {
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { useNotifications } from "@/hooks/useNotifications";
-import Navbar from "@/components/landing/Navbar";
+import PublicLayout from "@/components/layouts/PublicLayout";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -124,23 +124,21 @@ export default function UserDashboard() {
 
   if (authLoading || !user) {
     return (
-      <>
-        <Navbar />
-        <div className="max-w-6xl mx-auto px-4 py-8 space-y-6">
+      <PublicLayout>
+        <div className="space-y-6">
           <Skeleton className="h-10 w-48" />
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
             {Array.from({ length: 4 }).map((_, i) => <Skeleton key={i} className="h-24" />)}
           </div>
           <Skeleton className="h-64 w-full" />
         </div>
-      </>
+      </PublicLayout>
     );
   }
 
   return (
-    <>
-      <Navbar />
-      <main className="max-w-6xl mx-auto px-4 py-8 space-y-6">
+    <PublicLayout>
+      <div className="space-y-6">
         {/* Header */}
         <div className="flex items-start justify-between gap-4">
           <div className="flex items-center gap-3">
@@ -308,8 +306,8 @@ export default function UserDashboard() {
             </Card>
           </div>
         </div>
-      </main>
-    </>
+      </div>
+    </PublicLayout>
   );
 }
 
