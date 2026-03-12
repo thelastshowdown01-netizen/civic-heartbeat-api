@@ -7,11 +7,16 @@ interface StatCardProps {
   icon: React.ReactNode;
   accent?: string;
   loading?: boolean;
+  onClick?: () => void;
+  active?: boolean;
 }
 
-export function StatCard({ label, value, icon, accent, loading }: StatCardProps) {
+export function StatCard({ label, value, icon, accent, loading, onClick, active }: StatCardProps) {
   return (
-    <Card>
+    <Card
+      className={`transition-all ${onClick ? "cursor-pointer hover:shadow-md hover:border-primary/30" : ""} ${active ? "ring-2 ring-primary border-primary" : ""}`}
+      onClick={onClick}
+    >
       <CardContent className="p-4 flex flex-col gap-2">
         <div className={`flex items-center gap-2 ${accent ?? "text-muted-foreground"}`}>
           {icon}

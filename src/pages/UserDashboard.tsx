@@ -64,6 +64,37 @@ export default function UserDashboard() {
   const [categoryFilter, setCategoryFilter] = useState("all");
   const [priorityFilter, setPriorityFilter] = useState("all");
   const [sortBy, setSortBy] = useState("latest");
+  const [activeCard, setActiveCard] = useState<string | null>(null);
+
+  const handleStatClick = (card: string) => {
+    if (activeCard === card) {
+      // Toggle off
+      setActiveCard(null);
+      setStatusFilter("all");
+      setPriorityFilter("all");
+      return;
+    }
+    setActiveCard(card);
+    setCategoryFilter("all");
+    setSortBy("latest");
+    switch (card) {
+      case "active":
+        setStatusFilter("all");
+        setPriorityFilter("all");
+        break;
+      case "resolved":
+        setStatusFilter("resolved");
+        setPriorityFilter("all");
+        break;
+      case "high":
+        setStatusFilter("all");
+        setPriorityFilter("high");
+        break;
+      default:
+        setStatusFilter("all");
+        setPriorityFilter("all");
+    }
+  };
 
   // Fetch user's reports with joined issue data
   const { data: reports, isLoading } = useQuery({
@@ -97,7 +128,12 @@ export default function UserDashboard() {
     if (!reports) return [];
     let result = [...reports];
 
-    if (statusFilter !== "all") result = result.filter((r) => r.issues.status === statusFilter);
+    // "active" card: exclude resolved/rejected
+    if (activeCard === "active") {
+      result = result.filter((r) => !["resolved", "rejected"].includes(r.issues.status));
+    } else {
+      if (statusFilter !== "all") result = result.filter((r) => r.issues.status === statusFilter);
+    }
     if (categoryFilter !== "all") result = result.filter((r) => r.issues.category === categoryFilter);
     if (priorityFilter !== "all") result = result.filter((r) => r.issues.priority === priorityFilter);
 
@@ -113,7 +149,7 @@ export default function UserDashboard() {
     }
 
     return result;
-  }, [reports, statusFilter, categoryFilter, priorityFilter, sortBy]);
+  }, [reports, statusFilter, categoryFilter, priorityFilter, sortBy, activeCard]);
 
   const recentNotifications = (notifications ?? []).slice(0, 5);
 
@@ -149,10 +185,10 @@ export default function UserDashboard() {
 
         {/* Summary Cards */}
         <div className="card-grid-4">
-          <StatCard icon={<FileText className="h-5 w-5" />} label="Total Reports" value={stats.total} accent="text-primary" />
-          <StatCard icon={<Activity className="h-5 w-5" />} label="Active" value={stats.active} accent="text-info" />
-          <StatCard icon={<CheckCircle2 className="h-5 w-5" />} label="Resolved" value={stats.resolved} accent="text-primary" />
-          <StatCard icon={<AlertTriangle className="h-5 w-5" />} label="High Priority" value={stats.highPriority} accent="text-destructive" />
+          <StatCard icon={<FileText className="h-5 w-5" />} label="Total Reports" value={stats.total} accent="text-primary" onClick={() => handleStatClick("total")} active={activeCard === "total"} />
+          <StatCard icon={<Activity className="h-5 w-5" />} label="Active" value={stats.active} accent="text-info" onClick={() => handleStatClick("active")} active={activeCard === "active"} />
+          <StatCard icon={<CheckCircle2 className="h-5 w-5" />} label="Resolved" value={stats.resolved} accent="text-primary" onClick={() => handleStatClick("resolved")} active={activeCard === "resolved"} />
+          <StatCard icon={<AlertTriangle className="h-5 w-5" />} label="High Priority" value={stats.highPriority} accent="text-destructive" onClick={() => handleStatClick("high")} active={activeCard === "high"} />
         </div>
 
         {/* Main content grid */}
