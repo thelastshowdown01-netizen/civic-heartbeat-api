@@ -124,7 +124,7 @@ export default function AuthorityFeed() {
   }
 
   return (
-    <DashboardLayout title="Live Feed" icon={<Activity className="h-5 w-5" />}>
+    <PublicLayout>
       <div className="space-y-4">
         {/* Filters */}
         <div className="flex flex-wrap items-center gap-3 p-3 bg-muted/50 rounded-lg border border-border">
