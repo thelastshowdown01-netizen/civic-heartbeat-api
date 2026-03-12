@@ -61,8 +61,10 @@ export type Database = {
       issues: {
         Row: {
           assignee_id: string | null
+          authority_name: string | null
           category: Database["public"]["Enums"]["issue_category"]
           created_at: string
+          created_by: string | null
           description: string
           downvotes_count: number
           id: string
@@ -74,13 +76,16 @@ export type Database = {
           reports_count: number
           resolved_at: string | null
           status: Database["public"]["Enums"]["issue_status"]
+          title: string | null
           updated_at: string
           upvotes_count: number
         }
         Insert: {
           assignee_id?: string | null
+          authority_name?: string | null
           category: Database["public"]["Enums"]["issue_category"]
           created_at?: string
+          created_by?: string | null
           description: string
           downvotes_count?: number
           id?: string
@@ -92,13 +97,16 @@ export type Database = {
           reports_count?: number
           resolved_at?: string | null
           status?: Database["public"]["Enums"]["issue_status"]
+          title?: string | null
           updated_at?: string
           upvotes_count?: number
         }
         Update: {
           assignee_id?: string | null
+          authority_name?: string | null
           category?: Database["public"]["Enums"]["issue_category"]
           created_at?: string
+          created_by?: string | null
           description?: string
           downvotes_count?: number
           id?: string
@@ -110,6 +118,7 @@ export type Database = {
           reports_count?: number
           resolved_at?: string | null
           status?: Database["public"]["Enums"]["issue_status"]
+          title?: string | null
           updated_at?: string
           upvotes_count?: number
         }
@@ -152,22 +161,28 @@ export type Database = {
       }
       pincode_zones: {
         Row: {
+          area: string | null
           authority_id: string | null
           city: string
           pincode: string
           state: string
+          ward: string | null
         }
         Insert: {
+          area?: string | null
           authority_id?: string | null
           city: string
           pincode: string
           state: string
+          ward?: string | null
         }
         Update: {
+          area?: string | null
           authority_id?: string | null
           city?: string
           pincode?: string
           state?: string
+          ward?: string | null
         }
         Relationships: []
       }
