@@ -50,7 +50,7 @@ Deno.serve(async (req) => {
       { email: "citizen1@demo.sustaincity.in", password: "DemoPass123!", name: "Priya Sharma", role: "citizen" },
       { email: "citizen2@demo.sustaincity.in", password: "DemoPass123!", name: "Rahul Verma", role: "citizen" },
       { email: "citizen3@demo.sustaincity.in", password: "DemoPass123!", name: "Anita Desai", role: "citizen" },
-      { email: "admin@demo.sustaincity.in", password: "DemoPass123!", name: "Suresh Kumar", role: "admin" },
+      { email: "admin@demo.sustaincity.in", password: "DemoPass123!", name: "Suresh Kumar", role: "authority" },
       { email: "authority@demo.sustaincity.in", password: "DemoPass123!", name: "Municipal Water Dept", role: "authority" },
       { email: "authority2@demo.sustaincity.in", password: "DemoPass123!", name: "PWD Roads Division", role: "authority" },
     ];
