@@ -1,5 +1,7 @@
 import { Link } from "react-router-dom";
+import { Bell } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
+import { useUnreadCount } from "@/hooks/useNotifications";
 import { Button } from "@/components/ui/button";
 
 const Navbar = () => {
