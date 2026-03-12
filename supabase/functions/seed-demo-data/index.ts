@@ -286,7 +286,7 @@ Deno.serve(async (req) => {
 
       if (["assigned", "in_progress", "resolved"].includes(d.status)) {
         statusLogs.push({
-          issue_id: iss.id, changed_by_id: adminId,
+          issue_id: iss.id, changed_by_id: authority1,
           old_status: "verified", new_status: "assigned",
           comment: `Assigned to ${d.authority_name ?? "relevant department"}.`,
           created_at: daysAgo(Math.max(0, Math.floor(Math.random() * 2) + 3)),
