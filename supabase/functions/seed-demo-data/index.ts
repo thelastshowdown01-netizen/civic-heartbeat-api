@@ -277,7 +277,7 @@ Deno.serve(async (req) => {
 
       if (["verified", "assigned", "in_progress", "resolved"].includes(d.status)) {
         statusLogs.push({
-          issue_id: iss.id, changed_by_id: adminId,
+          issue_id: iss.id, changed_by_id: authority1,
           old_status: "reported", new_status: "verified",
           comment: "Issue verified after review. Forwarding to relevant department.",
           created_at: daysAgo(Math.max(0, Math.floor(Math.random() * 3) + 5)),
