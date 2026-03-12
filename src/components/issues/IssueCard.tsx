@@ -13,6 +13,7 @@ import {
   formatStatus,
   statusColors,
   priorityColors,
+  categoryIcons,
 } from "@/lib/issueHelpers";
 
 type Issue = {
