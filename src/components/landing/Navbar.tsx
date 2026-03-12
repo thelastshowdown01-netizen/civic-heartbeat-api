@@ -26,6 +26,14 @@ const Navbar = () => {
               <Link to="/dashboard" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors hidden sm:inline">
                 My Reports
               </Link>
+              <Link to="/notifications" className="relative text-muted-foreground hover:text-foreground transition-colors">
+                <Bell className="h-4.5 w-4.5" />
+                {(unreadCount ?? 0) > 0 && (
+                  <span className="absolute -top-1.5 -right-1.5 h-4 min-w-4 flex items-center justify-center rounded-full bg-destructive text-destructive-foreground text-[10px] font-bold px-1">
+                    {unreadCount! > 9 ? "9+" : unreadCount}
+                  </span>
+                )}
+              </Link>
               {userRole === "admin" && (
                 <Link to="/admin" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors hidden sm:inline">
                   Admin
