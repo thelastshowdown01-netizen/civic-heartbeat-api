@@ -214,30 +214,20 @@ const Notifications = () => {
             ))}
           </div>
         ) : filtered.length === 0 ? (
-          <Card className="border-dashed">
-            <CardContent className="p-12 text-center space-y-4">
-              <div className="mx-auto w-12 h-12 rounded-full bg-muted flex items-center justify-center">
-                <Bell className="h-6 w-6 text-muted-foreground" />
-              </div>
-              <div className="space-y-2">
-                <h3 className="text-lg font-semibold text-foreground">
-                  {filter === "unread" ? "All caught up!" : "No updates yet"}
-                </h3>
-                <p className="text-sm text-muted-foreground max-w-sm mx-auto">
-                  {filter === "unread"
-                    ? "You've read all your notifications. Check back later for new updates."
-                    : "You'll see issue progress and action updates here once you report a civic issue."}
-                </p>
-              </div>
-              {filter === "all" && (
-                <Link to="/report">
-                  <Button className="mt-2 gap-1">
-                    <Plus className="h-4 w-4" /> Report an Issue
-                  </Button>
-                </Link>
-              )}
-            </CardContent>
-          </Card>
+          <EmptyState
+            icon={<Bell className="h-7 w-7 text-muted-foreground" />}
+            title={filter === "unread" ? "All caught up!" : "No updates yet"}
+            description={filter === "unread"
+              ? "You've read all your notifications. Check back later for new updates."
+              : "You'll see issue progress and action updates here once you report a civic issue."}
+            action={filter === "all" ? (
+              <Link to="/report">
+                <Button className="gap-1">
+                  <Plus className="h-4 w-4" /> Report an Issue
+                </Button>
+              </Link>
+            ) : undefined}
+          />
         ) : (
           <div className="space-y-6">
             {renderGroup("Today", grouped.today)}

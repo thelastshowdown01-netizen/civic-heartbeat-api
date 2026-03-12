@@ -108,15 +108,10 @@ export default function ExploreIssues() {
   return (
     <PublicLayout>
       <div>
-        {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-3xl md:text-4xl font-bold text-foreground tracking-tight">
-            Explore City Issues
-          </h1>
-          <p className="text-muted-foreground mt-2 max-w-2xl">
-            Discover what's happening in your area — filter, vote, and track civic problems across the city.
-          </p>
-        </div>
+        <PageHeader
+          title="Explore City Issues"
+          description="Discover what's happening in your area — filter, vote, and track civic problems across the city."
+        />
 
         {/* Filter Bar */}
         <Collapsible open={filtersOpen} onOpenChange={setFiltersOpen}>

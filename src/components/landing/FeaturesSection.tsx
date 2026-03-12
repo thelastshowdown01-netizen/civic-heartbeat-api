@@ -38,10 +38,10 @@ const FeaturesSection = () => {
     <section className="bg-muted/30 py-20">
       <div className="max-w-6xl mx-auto px-4">
         <div className="text-center mb-14">
-          <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-3">
+          <h2 className="section-title text-3xl md:text-4xl mb-3">
             Not Just Reporting — Smarter Civic Resolution
           </h2>
-          <p className="text-muted-foreground max-w-2xl mx-auto text-base md:text-lg">
+          <p className="section-description max-w-2xl mx-auto text-base md:text-lg">
             From photo-based complaints to authority-tracked resolution, every step is designed to fix real problems faster.
           </p>
         </div>

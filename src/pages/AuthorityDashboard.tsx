@@ -232,15 +232,11 @@ export default function AuthorityDashboard() {
         {isLoading ? (
           <Skeleton className="h-64 w-full" />
         ) : filteredIssues.length === 0 ? (
-          <div className="flex flex-col items-center justify-center py-20 text-center space-y-3">
-            <div className="p-4 rounded-full bg-muted">
-              <Inbox className="h-8 w-8 text-muted-foreground" />
-            </div>
-            <h3 className="text-lg font-semibold text-foreground">No issues assigned yet</h3>
-            <p className="text-sm text-muted-foreground max-w-sm">
-              Assigned civic issues will appear here as they are routed to your department.
-            </p>
-          </div>
+          <EmptyState
+            icon={<Inbox className="h-8 w-8 text-muted-foreground" />}
+            title="No issues assigned yet"
+            description="Assigned civic issues will appear here as they are routed to your department."
+          />
         ) : (
           <div className="border rounded-lg overflow-hidden">
             <Table>

@@ -40,15 +40,6 @@ type Props = {
   onVoteUpdate?: (issueId: string, data: any) => void;
 };
 
-const categoryIcons: Record<string, string> = {
-  pothole: "🕳️",
-  garbage: "🗑️",
-  sewer_overflow: "🚰",
-  water_leakage: "💧",
-  street_light: "💡",
-  road_damage: "🚧",
-  other: "📋",
-};
 
 export default function IssueCard({ issue, userVote, onVoteUpdate }: Props) {
   const { user } = useAuth();

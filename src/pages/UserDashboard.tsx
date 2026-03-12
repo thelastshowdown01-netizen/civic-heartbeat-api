@@ -292,22 +292,6 @@ export default function UserDashboard() {
   );
 }
 
-/* ─── Summary Card ─── */
-function SummaryCard({ icon: Icon, label, value, color }: { icon: any; label: string; value: number; color: string }) {
-  return (
-    <Card>
-      <CardContent className="p-4 flex items-center gap-3">
-        <div className="p-2 rounded-lg bg-muted">
-          <Icon className={`h-5 w-5 ${color}`} />
-        </div>
-        <div>
-          <p className="text-2xl font-bold text-foreground">{value}</p>
-          <p className="text-xs text-muted-foreground">{label}</p>
-        </div>
-      </CardContent>
-    </Card>
-  );
-}
 
 /* ─── Report Card ─── */
 function ReportCard({ report }: { report: ReportWithIssue }) {

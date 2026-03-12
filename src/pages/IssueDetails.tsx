@@ -181,16 +181,16 @@ export default function IssueDetails() {
     return (
       <PublicLayout>
         <div className="flex flex-col items-center justify-center text-center py-32">
-          <div className="w-16 h-16 rounded-full bg-muted flex items-center justify-center mb-4">
-            <AlertTriangle className="h-7 w-7 text-muted-foreground" />
-          </div>
-          <h2 className="text-xl font-semibold text-foreground mb-2">Issue Not Found</h2>
-          <p className="text-muted-foreground mb-6 max-w-sm">
-            This issue may have been removed or the link is incorrect.
-          </p>
-          <Button asChild variant="outline">
-            <Link to="/issues"><ArrowLeft className="h-4 w-4 mr-2" /> Back to Issues</Link>
-          </Button>
+          <EmptyState
+            icon={<AlertTriangle className="h-7 w-7 text-muted-foreground" />}
+            title="Issue Not Found"
+            description="This issue may have been removed or the link is incorrect."
+            action={
+              <Button asChild variant="outline">
+                <Link to="/issues"><ArrowLeft className="h-4 w-4 mr-2" /> Back to Issues</Link>
+              </Button>
+            }
+          />
         </div>
       </PublicLayout>
     );
