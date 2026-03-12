@@ -2,12 +2,20 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import type { Database } from "@/integrations/supabase/types";
 
+type IssueStatus = Database["public"]["Enums"]["issue_status"];
+type IssueCategory = Database["public"]["Enums"]["issue_category"];
+type PriorityLabel = Database["public"]["Enums"]["priority_label"];
+
 export type FeedFilters = {
   pincode?: string;
-  category?: string;
-  status?: string;
-  priority?: string;
+  category?: IssueCategory;
+  status?: IssueStatus;
+  priority?: PriorityLabel;
   authorityName?: string;
+  sortBy?: "recent" | "priority" | "upvoted" | "reported";
+  page?: number;
+  pageSize?: number;
+};
   sortBy?: "recent" | "priority" | "upvoted" | "reported";
   page?: number;
   pageSize?: number;
