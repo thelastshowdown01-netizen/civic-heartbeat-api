@@ -342,7 +342,6 @@ Deno.serve(async (req) => {
         },
         demo_credentials: {
           citizen: { email: "citizen1@demo.sustaincity.in", password: "DemoPass123!" },
-          admin: { email: "admin@demo.sustaincity.in", password: "DemoPass123!" },
           authority: { email: "authority@demo.sustaincity.in", password: "DemoPass123!" },
         },
       }),
