@@ -74,6 +74,11 @@ const Notifications = () => {
     { label: "Resolved", value: resolvedCount, icon: CheckCircle2, color: "text-primary" },
   ];
 
+  if (shouldRedirect) {
+    navigate("/login");
+    return null;
+  }
+
   const handleMarkRead = (id: string, isRead: boolean) => {
     if (!isRead) markAsRead.mutate(id);
   };
