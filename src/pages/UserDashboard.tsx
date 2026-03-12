@@ -185,10 +185,10 @@ export default function UserDashboard() {
 
         {/* Summary Cards */}
         <div className="card-grid-4">
-          <StatCard icon={<FileText className="h-5 w-5" />} label="Total Reports" value={stats.total} accent="text-primary" />
-          <StatCard icon={<Activity className="h-5 w-5" />} label="Active" value={stats.active} accent="text-info" />
-          <StatCard icon={<CheckCircle2 className="h-5 w-5" />} label="Resolved" value={stats.resolved} accent="text-primary" />
-          <StatCard icon={<AlertTriangle className="h-5 w-5" />} label="High Priority" value={stats.highPriority} accent="text-destructive" />
+          <StatCard icon={<FileText className="h-5 w-5" />} label="Total Reports" value={stats.total} accent="text-primary" onClick={() => handleStatClick("total")} active={activeCard === "total"} />
+          <StatCard icon={<Activity className="h-5 w-5" />} label="Active" value={stats.active} accent="text-info" onClick={() => handleStatClick("active")} active={activeCard === "active"} />
+          <StatCard icon={<CheckCircle2 className="h-5 w-5" />} label="Resolved" value={stats.resolved} accent="text-primary" onClick={() => handleStatClick("resolved")} active={activeCard === "resolved"} />
+          <StatCard icon={<AlertTriangle className="h-5 w-5" />} label="High Priority" value={stats.highPriority} accent="text-destructive" onClick={() => handleStatClick("high")} active={activeCard === "high"} />
         </div>
 
         {/* Main content grid */}
