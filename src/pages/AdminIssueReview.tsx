@@ -196,11 +196,13 @@ export default function AdminIssueReview() {
 
   if (!issue) {
     return (
-      <div className="min-h-screen bg-background flex flex-col items-center justify-center gap-4">
-        <AlertTriangle className="h-12 w-12 text-muted-foreground" />
-        <h2 className="text-xl font-semibold">Issue Not Found</h2>
-        <Button asChild variant="outline"><Link to="/admin"><ArrowLeft className="h-4 w-4 mr-2" />Back to Dashboard</Link></Button>
-      </div>
+      <DashboardLayout>
+        <div className="flex flex-col items-center justify-center gap-4 py-20">
+          <AlertTriangle className="h-12 w-12 text-muted-foreground" />
+          <h2 className="text-xl font-semibold">Issue Not Found</h2>
+          <Button asChild variant="outline"><Link to="/admin"><ArrowLeft className="h-4 w-4 mr-2" />Back to Dashboard</Link></Button>
+        </div>
+      </DashboardLayout>
     );
   }
 
