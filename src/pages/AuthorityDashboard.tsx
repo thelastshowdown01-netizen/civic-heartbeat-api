@@ -1,64 +1,55 @@
-import { useState, useEffect, useMemo } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { Building2, Filter, ArrowUpDown, Play, Award, Eye, MessageSquarePlus, Inbox, CheckCircle, XCircle } from "lucide-react";
-import { StatCard } from "@/components/ui/stat-card";
-import { EmptyState } from "@/components/ui/empty-state";
-import { format, formatDistanceToNow } from "date-fns";
+import {
+  Building2, Filter, ArrowUpDown, FileText, Clock,
+  CheckCircle2, AlertTriangle, Loader2, Activity,
+} from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
 import DashboardLayout from "@/components/layouts/DashboardLayout";
-import { Card, CardContent } from "@/components/ui/card";
+import { StatCard } from "@/components/ui/stat-card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { EmptyState } from "@/components/ui/empty-state";
 import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from "@/components/ui/select";
 import {
-  Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
-} from "@/components/ui/table";
-import {
-  DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuSeparator,
-} from "@/components/ui/dropdown-menu";
-import {
   Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle,
 } from "@/components/ui/dialog";
-import { MoreHorizontal, FileText, Clock, Loader2, CheckCircle2, AlertTriangle } from "lucide-react";
-import { formatCategory, formatStatus, statusColors, priorityColors } from "@/lib/issueHelpers";
+import { formatDistanceToNow } from "date-fns";
+import { formatCategory, formatStatus, statusColors } from "@/lib/issueHelpers";
 import { Constants } from "@/integrations/supabase/types";
 import type { Tables } from "@/integrations/supabase/types";
+import { IssueActionCard } from "@/components/authority/IssueActionCard";
 
 type Issue = Tables<"issues">;
-
 const PAGE_SIZE = 20;
 
 export default function AuthorityDashboard() {
   const { user, userRole, loading: authLoading } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
-  const queryClient = useQueryClient();
+  const qc = useQueryClient();
 
   useEffect(() => {
-    if (!authLoading && (!user || userRole !== "authority")) {
-      navigate("/");
-    }
+    if (!authLoading && (!user || userRole !== "authority")) navigate("/");
   }, [authLoading, user, userRole, navigate]);
 
-  // Filters
-  const [statusFilter, setStatusFilter] = useState<string>("all");
-  const [categoryFilter, setCategoryFilter] = useState<string>("all");
-  const [priorityFilter, setPriorityFilter] = useState<string>("all");
-  const [pincodeFilter, setPincodeFilter] = useState("");
-  const [sortBy, setSortBy] = useState<string>("newest");
+  // ── State ──
+  const [activeTab, setActiveTab] = useState("reports");
+  const [categoryFilter, setCategoryFilter] = useState("all");
+  const [sortBy, setSortBy] = useState("newest");
   const [page, setPage] = useState(0);
 
-  // Dialog states
+  // Dialogs
   const [updateDialogOpen, setUpdateDialogOpen] = useState(false);
   const [updateIssueId, setUpdateIssueId] = useState<string | null>(null);
   const [updateNote, setUpdateNote] = useState("");
@@ -67,68 +58,9 @@ export default function AuthorityDashboard() {
   const [rejectComment, setRejectComment] = useState("");
   const [actionLoading, setActionLoading] = useState(false);
 
-  // Fetch review queue (reported issues needing verification)
-  const { data: reviewQueue, isLoading: reviewLoading } = useQuery({
-    queryKey: ["authority-review-queue"],
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from("issues")
-        .select("*")
-        .eq("status", "reported")
-        .order("priority_score", { ascending: false })
-        .limit(50);
-      if (error) throw error;
-      return data as Issue[];
-    },
-    staleTime: 15_000,
-  });
+  // ── Queries ──
 
-  // Fetch urgent issues
-  const { data: urgentIssues, isLoading: urgentLoading } = useQuery({
-    queryKey: ["authority-urgent"],
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from("issues")
-        .select("*")
-        .eq("priority", "high")
-        .not("status", "in", '("resolved","rejected")')
-        .order("priority_score", { ascending: false })
-        .limit(50);
-      if (error) throw error;
-      return data as Issue[];
-    },
-    staleTime: 15_000,
-  });
-
-  // All issues with filters
-  const { data: allIssuesData, isLoading: allLoading } = useQuery({
-    queryKey: ["authority-all-issues", statusFilter, categoryFilter, priorityFilter, pincodeFilter, sortBy, page],
-    queryFn: async () => {
-      let query = supabase.from("issues").select("*", { count: "exact" });
-
-      if (statusFilter !== "all") query = query.eq("status", statusFilter as any);
-      if (categoryFilter !== "all") query = query.eq("category", categoryFilter as any);
-      if (priorityFilter !== "all") query = query.eq("priority", priorityFilter as any);
-      if (pincodeFilter.trim()) query = query.eq("pincode", pincodeFilter.trim());
-
-      switch (sortBy) {
-        case "oldest": query = query.order("created_at", { ascending: true }); break;
-        case "priority": query = query.order("priority_score", { ascending: false }); break;
-        case "most_reported": query = query.order("reports_count", { ascending: false }); break;
-        case "most_upvoted": query = query.order("upvotes_count", { ascending: false }); break;
-        default: query = query.order("created_at", { ascending: false });
-      }
-
-      query = query.range(page * PAGE_SIZE, (page + 1) * PAGE_SIZE - 1);
-
-      const { data, error, count } = await query;
-      if (error) throw error;
-      return { issues: data as Issue[], total: count ?? 0 };
-    },
-    staleTime: 15_000,
-  });
-
-  // Compute stats
+  // Dashboard stats
   const { data: stats, isLoading: statsLoading } = useQuery({
     queryKey: ["authority-dashboard-stats"],
     queryFn: async () => {
@@ -144,37 +76,84 @@ export default function AuthorityDashboard() {
     staleTime: 30_000,
   });
 
-  const { data: statusCounts, isLoading: countsLoading } = useQuery({
-    queryKey: ["authority-status-counts"],
+  // Recent activity (last 5 status changes)
+  const { data: recentActivity } = useQuery({
+    queryKey: ["authority-recent-activity"],
     queryFn: async () => {
-      const statuses = ["reported", "verified", "assigned", "in_progress", "resolved"] as const;
-      const results: Record<string, number> = {};
-      await Promise.all(
-        statuses.map(async (s) => {
-          const { count } = await supabase
-            .from("issues")
-            .select("id", { count: "exact", head: true })
-            .eq("status", s);
-          results[s] = count ?? 0;
-        })
-      );
-      return results;
+      const { data, error } = await supabase
+        .from("status_logs")
+        .select("id, issue_id, old_status, new_status, comment, created_at")
+        .order("created_at", { ascending: false })
+        .limit(5);
+      if (error) throw error;
+      // Fetch issue titles
+      const issueIds = [...new Set(data.map((d) => d.issue_id))];
+      const { data: issues } = await supabase
+        .from("issues")
+        .select("id, title, description")
+        .in("id", issueIds);
+      const issueMap = new Map(issues?.map((i) => [i.id, i.title || i.description.slice(0, 50)]) ?? []);
+      return data.map((d) => ({ ...d, issueTitle: issueMap.get(d.issue_id) ?? "Unknown" }));
     },
     staleTime: 30_000,
   });
 
+  // Live feed with filters
+  const { data: feedData, isLoading: feedLoading } = useQuery({
+    queryKey: ["authority-live-feed", categoryFilter, sortBy, page],
+    queryFn: async () => {
+      let query = supabase.from("issues").select("*", { count: "exact" })
+        .neq("status", "rejected");
+
+      if (categoryFilter !== "all") query = query.eq("category", categoryFilter as any);
+
+      switch (sortBy) {
+        case "oldest": query = query.order("created_at", { ascending: true }); break;
+        case "priority": query = query.order("priority_score", { ascending: false }); break;
+        case "most_reported": query = query.order("reports_count", { ascending: false }); break;
+        case "most_upvoted": query = query.order("upvotes_count", { ascending: false }); break;
+        default: query = query.order("created_at", { ascending: false });
+      }
+
+      query = query.range(page * PAGE_SIZE, (page + 1) * PAGE_SIZE - 1);
+      const { data, error, count } = await query;
+      if (error) throw error;
+      return { issues: data as Issue[], total: count ?? 0 };
+    },
+    staleTime: 15_000,
+    enabled: activeTab === "feed",
+  });
+
+  // Merged issues (reports_count > 1)
+  const { data: mergedIssues, isLoading: mergedLoading } = useQuery({
+    queryKey: ["authority-merged-issues"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("issues")
+        .select("*")
+        .gt("reports_count", 1)
+        .neq("status", "rejected")
+        .order("reports_count", { ascending: false })
+        .limit(50);
+      if (error) throw error;
+      return data as Issue[];
+    },
+    staleTime: 15_000,
+    enabled: activeTab === "merged",
+  });
+
+  // ── Actions ──
   const handleStatusChange = async (issueId: string, newStatus: string, comment?: string) => {
     setActionLoading(true);
     const body: Record<string, unknown> = { issue_id: issueId, new_status: newStatus };
     if (comment) body.comment = comment;
-
     const { data, error } = await supabase.functions.invoke("update-issue-status", { body });
     setActionLoading(false);
 
     if (error || data?.error) {
       toast({ title: "Action failed", description: data?.error || error?.message, variant: "destructive" });
     } else {
-      toast({ title: "Issue updated", description: `Status changed to ${newStatus.replace(/_/g, " ")}.` });
+      toast({ title: "Issue updated", description: `Status → ${newStatus.replace(/_/g, " ")}` });
       invalidateAll();
     }
   };
@@ -196,32 +175,30 @@ export default function AuthorityDashboard() {
   };
 
   const invalidateAll = () => {
-    queryClient.invalidateQueries({ queryKey: ["authority-review-queue"] });
-    queryClient.invalidateQueries({ queryKey: ["authority-urgent"] });
-    queryClient.invalidateQueries({ queryKey: ["authority-all-issues"] });
-    queryClient.invalidateQueries({ queryKey: ["authority-dashboard-stats"] });
-    queryClient.invalidateQueries({ queryKey: ["authority-status-counts"] });
+    qc.invalidateQueries({ queryKey: ["authority-dashboard-stats"] });
+    qc.invalidateQueries({ queryKey: ["authority-recent-activity"] });
+    qc.invalidateQueries({ queryKey: ["authority-live-feed"] });
+    qc.invalidateQueries({ queryKey: ["authority-merged-issues"] });
   };
 
-  const totalPages = Math.ceil((allIssuesData?.total ?? 0) / PAGE_SIZE);
-  const loading = statsLoading || countsLoading;
+  // Action handlers for cards
+  const cardActions = {
+    onVerify: (id: string) => handleStatusChange(id, "verified"),
+    onReject: (id: string) => { setRejectIssueId(id); setRejectDialogOpen(true); },
+    onInProgress: (id: string) => { setUpdateIssueId(id); setUpdateDialogOpen(true); },
+    onResolve: (id: string) => handleStatusChange(id, "resolved"),
+    onAddUpdate: (id: string) => { setUpdateIssueId(id); setUpdateDialogOpen(true); },
+  };
 
-  const statCards = [
-    { label: "Total Issues", value: stats?.total_issues ?? 0, icon: <FileText className="h-5 w-5" /> },
-    { label: "Needs Review", value: statusCounts?.reported ?? 0, icon: <Clock className="h-5 w-5" />, accent: "text-accent" },
-    { label: "Verified", value: statusCounts?.verified ?? 0, icon: <CheckCircle2 className="h-5 w-5" /> },
-    { label: "In Progress", value: statusCounts?.in_progress ?? 0, icon: <Loader2 className="h-5 w-5" />, accent: "text-primary" },
-    { label: "Resolved", value: statusCounts?.resolved ?? 0, icon: <CheckCircle2 className="h-5 w-5" />, accent: "text-primary" },
-    { label: "High Priority", value: stats?.high_priority_unresolved ?? 0, icon: <AlertTriangle className="h-5 w-5" />, accent: "text-destructive" },
-  ];
+  const totalPages = Math.ceil((feedData?.total ?? 0) / PAGE_SIZE);
 
   if (authLoading || (!user && !authLoading)) {
     return (
       <DashboardLayout title="Authority Dashboard" icon={<Building2 className="h-5 w-5" />}>
         <div className="space-y-6">
           <Skeleton className="h-10 w-64" />
-          <div className="grid grid-cols-2 md:grid-cols-6 gap-3">
-            {Array.from({ length: 6 }).map((_, i) => <Skeleton key={i} className="h-24" />)}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {Array.from({ length: 3 }).map((_, i) => <Skeleton key={i} className="h-28" />)}
           </div>
         </div>
       </DashboardLayout>
@@ -231,106 +208,92 @@ export default function AuthorityDashboard() {
   return (
     <DashboardLayout title="Authority Dashboard" icon={<Building2 className="h-5 w-5" />}>
       <div className="space-y-6">
-        <p className="page-description">
-          Review, verify, and resolve civic issues in your department.
-        </p>
-
-        {/* Stats */}
-        <div className="card-grid-6">
-          {statCards.map((card) => (
-            <StatCard key={card.label} {...card} loading={loading} />
-          ))}
-        </div>
-
-        {/* Tabs */}
-        <Tabs defaultValue="review" className="space-y-4">
-          <TabsList>
-            <TabsTrigger value="review">
-              Review Queue
-              {(reviewQueue?.length ?? 0) > 0 && (
-                <span className="ml-1.5 text-xs bg-destructive/15 text-destructive rounded-full px-1.5 py-0.5">
-                  {reviewQueue?.length}
-                </span>
-              )}
-            </TabsTrigger>
-            <TabsTrigger value="all">All Issues</TabsTrigger>
-            <TabsTrigger value="urgent">
-              Urgent
-              {(urgentIssues?.length ?? 0) > 0 && (
-                <span className="ml-1.5 text-xs bg-destructive/15 text-destructive rounded-full px-1.5 py-0.5">
-                  {urgentIssues?.length}
-                </span>
-              )}
-            </TabsTrigger>
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-5">
+          <TabsList className="grid w-full max-w-md grid-cols-3">
+            <TabsTrigger value="reports">Reports</TabsTrigger>
+            <TabsTrigger value="feed">Live Feed</TabsTrigger>
+            <TabsTrigger value="merged">Merged Issues</TabsTrigger>
           </TabsList>
 
-          <TabsContent value="review">
-            {reviewLoading ? (
-              <Skeleton className="h-64 w-full" />
-            ) : (
-              <IssueTable
-                issues={reviewQueue ?? []}
-                onVerify={(id) => handleStatusChange(id, "verified")}
-                onReject={(id) => { setRejectIssueId(id); setRejectDialogOpen(true); }}
-                onInProgress={(id) => handleStatusChange(id, "in_progress")}
-                onResolve={(id) => handleStatusChange(id, "resolved")}
-                onAddUpdate={(id) => { setUpdateIssueId(id); setUpdateDialogOpen(true); }}
+          {/* ═══════════ TAB 1: Reports (Landing) ═══════════ */}
+          <TabsContent value="reports" className="space-y-6">
+            {/* 3 stat cards */}
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              <StatCard
+                label="Total Problems"
+                value={stats?.total_issues ?? 0}
+                icon={<FileText className="h-5 w-5" />}
+                loading={statsLoading}
               />
-            )}
+              <StatCard
+                label="Resolved"
+                value={stats?.resolved_issues ?? 0}
+                icon={<CheckCircle2 className="h-5 w-5" />}
+                accent="text-primary"
+                loading={statsLoading}
+              />
+              <StatCard
+                label="Active Problems"
+                value={stats?.active_issues ?? 0}
+                icon={<AlertTriangle className="h-5 w-5" />}
+                accent="text-destructive"
+                loading={statsLoading}
+              />
+            </div>
+
+            {/* Recent activity */}
+            <Card>
+              <CardHeader className="pb-3">
+                <CardTitle className="text-base flex items-center gap-2">
+                  <Activity className="h-4 w-4 text-primary" />
+                  Recent Activity
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                {!recentActivity || recentActivity.length === 0 ? (
+                  <p className="text-sm text-muted-foreground text-center py-4">No recent activity</p>
+                ) : (
+                  recentActivity.map((a) => (
+                    <div key={a.id} className="flex items-center gap-3 text-sm">
+                      <div className="h-2 w-2 rounded-full bg-primary shrink-0" />
+                      <span className="flex-1 min-w-0 truncate text-foreground">
+                        <span className="font-medium">{a.issueTitle}</span>
+                        {" → "}
+                        <Badge variant="outline" className={`text-[10px] ${statusColors[a.new_status] ?? ""}`}>
+                          {formatStatus(a.new_status)}
+                        </Badge>
+                      </span>
+                      <span className="text-xs text-muted-foreground shrink-0">
+                        {formatDistanceToNow(new Date(a.created_at), { addSuffix: true })}
+                      </span>
+                    </div>
+                  ))
+                )}
+              </CardContent>
+            </Card>
           </TabsContent>
 
-          <TabsContent value="all" className="space-y-4">
+          {/* ═══════════ TAB 2: Live Feed ═══════════ */}
+          <TabsContent value="feed" className="space-y-4">
             {/* Filters */}
-            <div className="flex flex-wrap items-center gap-3 p-4 bg-muted/50 rounded-lg border border-border">
+            <div className="flex flex-wrap items-center gap-3 p-3 bg-muted/50 rounded-lg border border-border">
               <Filter className="h-4 w-4 text-muted-foreground" />
-
-              <Select value={statusFilter} onValueChange={(v) => { setStatusFilter(v); setPage(0); }}>
-                <SelectTrigger className="w-[140px] h-9 text-xs">
-                  <SelectValue placeholder="Status" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">All Statuses</SelectItem>
-                  {Constants.public.Enums.issue_status.map((s) => (
-                    <SelectItem key={s} value={s}>{s.replace(/_/g, " ")}</SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-
               <Select value={categoryFilter} onValueChange={(v) => { setCategoryFilter(v); setPage(0); }}>
-                <SelectTrigger className="w-[140px] h-9 text-xs">
+                <SelectTrigger className="w-[150px] h-9 text-xs">
                   <SelectValue placeholder="Category" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">All Categories</SelectItem>
                   {Constants.public.Enums.issue_category.map((c) => (
-                    <SelectItem key={c} value={c}>{c.replace(/_/g, " ")}</SelectItem>
+                    <SelectItem key={c} value={c}>{formatCategory(c)}</SelectItem>
                   ))}
                 </SelectContent>
               </Select>
-
-              <Select value={priorityFilter} onValueChange={(v) => { setPriorityFilter(v); setPage(0); }}>
-                <SelectTrigger className="w-[120px] h-9 text-xs">
-                  <SelectValue placeholder="Priority" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">All Priorities</SelectItem>
-                  {Constants.public.Enums.priority_label.map((p) => (
-                    <SelectItem key={p} value={p}>{p}</SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-
-              <Input
-                placeholder="Pincode"
-                value={pincodeFilter}
-                onChange={(e) => { setPincodeFilter(e.target.value); setPage(0); }}
-                className="w-[110px] h-9 text-xs"
-              />
 
               <div className="flex items-center gap-1.5 ml-auto">
                 <ArrowUpDown className="h-4 w-4 text-muted-foreground" />
                 <Select value={sortBy} onValueChange={(v) => { setSortBy(v); setPage(0); }}>
-                  <SelectTrigger className="w-[150px] h-9 text-xs">
+                  <SelectTrigger className="w-[155px] h-9 text-xs">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
@@ -344,30 +307,31 @@ export default function AuthorityDashboard() {
               </div>
             </div>
 
-            {allLoading ? (
-              <Skeleton className="h-64 w-full" />
+            {feedLoading ? (
+              <div className="space-y-3">
+                {Array.from({ length: 4 }).map((_, i) => <Skeleton key={i} className="h-32" />)}
+              </div>
+            ) : (feedData?.issues.length ?? 0) === 0 ? (
+              <EmptyState
+                icon={<FileText className="h-10 w-10" />}
+                title="No issues found"
+                description="Try adjusting your filters."
+              />
             ) : (
               <>
-                <IssueTable
-                  issues={allIssuesData?.issues ?? []}
-                  onVerify={(id) => handleStatusChange(id, "verified")}
-                  onReject={(id) => { setRejectIssueId(id); setRejectDialogOpen(true); }}
-                  onInProgress={(id) => handleStatusChange(id, "in_progress")}
-                  onResolve={(id) => handleStatusChange(id, "resolved")}
-                  onAddUpdate={(id) => { setUpdateIssueId(id); setUpdateDialogOpen(true); }}
-                />
+                <div className="space-y-3">
+                  {feedData!.issues.map((issue) => (
+                    <IssueActionCard key={issue.id} issue={issue} {...cardActions} />
+                  ))}
+                </div>
                 {totalPages > 1 && (
                   <div className="flex items-center justify-between pt-2">
                     <span className="text-xs text-muted-foreground">
-                      Showing {page * PAGE_SIZE + 1}–{Math.min((page + 1) * PAGE_SIZE, allIssuesData?.total ?? 0)} of {allIssuesData?.total}
+                      {page * PAGE_SIZE + 1}–{Math.min((page + 1) * PAGE_SIZE, feedData!.total)} of {feedData!.total}
                     </span>
                     <div className="flex gap-2">
-                      <Button variant="outline" size="sm" onClick={() => setPage(page - 1)} disabled={page === 0}>
-                        Previous
-                      </Button>
-                      <Button variant="outline" size="sm" onClick={() => setPage(page + 1)} disabled={page >= totalPages - 1}>
-                        Next
-                      </Button>
+                      <Button variant="outline" size="sm" onClick={() => setPage(page - 1)} disabled={page === 0}>Prev</Button>
+                      <Button variant="outline" size="sm" onClick={() => setPage(page + 1)} disabled={page >= totalPages - 1}>Next</Button>
                     </div>
                   </div>
                 )}
@@ -375,202 +339,67 @@ export default function AuthorityDashboard() {
             )}
           </TabsContent>
 
-          <TabsContent value="urgent">
-            {urgentLoading ? (
-              <Skeleton className="h-64 w-full" />
-            ) : (
-              <IssueTable
-                issues={urgentIssues ?? []}
-                onVerify={(id) => handleStatusChange(id, "verified")}
-                onReject={(id) => { setRejectIssueId(id); setRejectDialogOpen(true); }}
-                onInProgress={(id) => handleStatusChange(id, "in_progress")}
-                onResolve={(id) => handleStatusChange(id, "resolved")}
-                onAddUpdate={(id) => { setUpdateIssueId(id); setUpdateDialogOpen(true); }}
+          {/* ═══════════ TAB 3: Merged Issues ═══════════ */}
+          <TabsContent value="merged" className="space-y-4">
+            <p className="text-sm text-muted-foreground">
+              Issues reported by multiple citizens that were automatically merged based on location and description similarity.
+            </p>
+            {mergedLoading ? (
+              <div className="space-y-3">
+                {Array.from({ length: 3 }).map((_, i) => <Skeleton key={i} className="h-32" />)}
+              </div>
+            ) : (mergedIssues?.length ?? 0) === 0 ? (
+              <EmptyState
+                icon={<Loader2 className="h-10 w-10" />}
+                title="No merged issues yet"
+                description="When multiple citizens report the same problem, they'll appear here as a single consolidated issue."
               />
+            ) : (
+              <div className="space-y-3">
+                {mergedIssues!.map((issue) => (
+                  <IssueActionCard key={issue.id} issue={issue} {...cardActions} showMergedExpand />
+                ))}
+              </div>
             )}
           </TabsContent>
         </Tabs>
       </div>
 
       {/* Progress Update Dialog */}
-      <Dialog open={updateDialogOpen} onOpenChange={(open) => {
-        if (!open) { setUpdateDialogOpen(false); setUpdateIssueId(null); setUpdateNote(""); }
-      }}>
+      <Dialog open={updateDialogOpen} onOpenChange={(o) => { if (!o) { setUpdateDialogOpen(false); setUpdateNote(""); } }}>
         <DialogContent>
           <DialogHeader>
             <DialogTitle>Add Progress Update</DialogTitle>
-            <DialogDescription>
-              Provide a brief note about the progress made on this issue. This will be visible in the issue timeline.
-            </DialogDescription>
+            <DialogDescription>Describe the action taken. This will mark the issue as Work In Progress.</DialogDescription>
           </DialogHeader>
-          <Textarea
-            placeholder="Describe the progress or action taken..."
-            value={updateNote}
-            onChange={(e) => setUpdateNote(e.target.value)}
-            rows={4}
-          />
+          <Textarea placeholder="Describe progress..." value={updateNote} onChange={(e) => setUpdateNote(e.target.value)} rows={4} />
           <DialogFooter>
-            <Button variant="outline" onClick={() => { setUpdateDialogOpen(false); setUpdateNote(""); }}>
-              Cancel
-            </Button>
+            <Button variant="outline" onClick={() => { setUpdateDialogOpen(false); setUpdateNote(""); }}>Cancel</Button>
             <Button onClick={handleProgressSubmit} disabled={actionLoading || !updateNote.trim()}>
-              {actionLoading ? "Submitting…" : "Submit Update"}
+              {actionLoading ? <Loader2 className="h-4 w-4 animate-spin mr-1" /> : null}
+              Submit
             </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
 
       {/* Reject Dialog */}
-      <Dialog open={rejectDialogOpen} onOpenChange={(open) => {
-        if (!open) { setRejectDialogOpen(false); setRejectIssueId(null); setRejectComment(""); }
-      }}>
+      <Dialog open={rejectDialogOpen} onOpenChange={(o) => { if (!o) { setRejectDialogOpen(false); setRejectComment(""); } }}>
         <DialogContent>
           <DialogHeader>
             <DialogTitle>Reject Issue</DialogTitle>
-            <DialogDescription>
-              Provide a reason for rejecting this issue. This will be visible to the reporter.
-            </DialogDescription>
+            <DialogDescription>Provide a reason for rejecting this issue.</DialogDescription>
           </DialogHeader>
-          <Textarea
-            placeholder="Reason for rejection..."
-            value={rejectComment}
-            onChange={(e) => setRejectComment(e.target.value)}
-            rows={3}
-          />
+          <Textarea placeholder="Reason for rejection..." value={rejectComment} onChange={(e) => setRejectComment(e.target.value)} rows={4} />
           <DialogFooter>
-            <Button variant="outline" onClick={() => { setRejectDialogOpen(false); setRejectComment(""); }}>
-              Cancel
-            </Button>
+            <Button variant="outline" onClick={() => { setRejectDialogOpen(false); setRejectComment(""); }}>Cancel</Button>
             <Button variant="destructive" onClick={handleRejectSubmit} disabled={actionLoading || !rejectComment.trim()}>
-              {actionLoading ? "Rejecting…" : "Confirm Rejection"}
+              {actionLoading ? <Loader2 className="h-4 w-4 animate-spin mr-1" /> : null}
+              Reject
             </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
     </DashboardLayout>
-  );
-}
-
-
-/* ─── Reusable Issue Table ─── */
-interface IssueTableProps {
-  issues: Issue[];
-  onVerify: (id: string) => void;
-  onReject: (id: string) => void;
-  onInProgress: (id: string) => void;
-  onResolve: (id: string) => void;
-  onAddUpdate: (id: string) => void;
-}
-
-function IssueTable({ issues, onVerify, onReject, onInProgress, onResolve, onAddUpdate }: IssueTableProps) {
-  if (issues.length === 0) {
-    return (
-      <EmptyState
-        icon={<Inbox className="h-8 w-8 text-muted-foreground" />}
-        title="No issues found"
-        description="No issues match the current view."
-      />
-    );
-  }
-
-  return (
-    <div className="border rounded-lg overflow-hidden">
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead className="min-w-[180px]">Issue</TableHead>
-            <TableHead>Category</TableHead>
-            <TableHead>Pincode</TableHead>
-            <TableHead>Status</TableHead>
-            <TableHead>Priority</TableHead>
-            <TableHead className="text-center">Reports</TableHead>
-            <TableHead className="text-center">Votes</TableHead>
-            <TableHead>Updated</TableHead>
-            <TableHead className="w-[60px]"></TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {issues.map((issue) => (
-            <TableRow key={issue.id}>
-              <TableCell className="font-medium max-w-[220px] truncate">
-                {issue.title || formatCategory(issue.category)}
-              </TableCell>
-              <TableCell>
-                <span className="text-xs">{formatCategory(issue.category)}</span>
-              </TableCell>
-              <TableCell className="text-xs text-muted-foreground">
-                {issue.pincode || "—"}
-              </TableCell>
-              <TableCell>
-                <Badge variant="outline" className={`text-xs ${statusColors[issue.status]}`}>
-                  {formatStatus(issue.status)}
-                </Badge>
-              </TableCell>
-              <TableCell>
-                <Badge variant="outline" className={`text-xs ${priorityColors[issue.priority]}`}>
-                  {issue.priority}
-                </Badge>
-              </TableCell>
-              <TableCell className="text-center text-xs">{issue.reports_count}</TableCell>
-              <TableCell className="text-center text-xs">
-                <span className="text-primary">↑{issue.upvotes_count}</span>
-                {" / "}
-                <span className="text-destructive">↓{issue.downvotes_count}</span>
-              </TableCell>
-              <TableCell className="text-xs text-muted-foreground">
-                {formatDistanceToNow(new Date(issue.updated_at), { addSuffix: true })}
-              </TableCell>
-              <TableCell>
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" size="icon" className="h-8 w-8">
-                      <MoreHorizontal className="h-4 w-4" />
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end">
-                    <DropdownMenuItem asChild>
-                      <Link to={`/issues/${issue.id}`} className="flex items-center gap-2">
-                        <Eye className="h-4 w-4" /> View Details
-                      </Link>
-                    </DropdownMenuItem>
-                    <DropdownMenuSeparator />
-                    {issue.status === "reported" && (
-                      <>
-                        <DropdownMenuItem onClick={() => onVerify(issue.id)}>
-                          <CheckCircle className="h-4 w-4 mr-2" /> Verify Issue
-                        </DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => onReject(issue.id)} className="text-destructive">
-                          <XCircle className="h-4 w-4 mr-2" /> Reject Issue
-                        </DropdownMenuItem>
-                      </>
-                    )}
-                    {(issue.status === "verified" || issue.status === "assigned") && (
-                      <>
-                        <DropdownMenuItem onClick={() => onInProgress(issue.id)}>
-                          <Play className="h-4 w-4 mr-2" /> Mark In Progress
-                        </DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => onReject(issue.id)} className="text-destructive">
-                          <XCircle className="h-4 w-4 mr-2" /> Reject Issue
-                        </DropdownMenuItem>
-                      </>
-                    )}
-                    {issue.status === "in_progress" && (
-                      <>
-                        <DropdownMenuItem onClick={() => onAddUpdate(issue.id)}>
-                          <MessageSquarePlus className="h-4 w-4 mr-2" /> Add Progress Update
-                        </DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => onResolve(issue.id)}>
-                          <Award className="h-4 w-4 mr-2" /> Mark Resolved
-                        </DropdownMenuItem>
-                      </>
-                    )}
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
   );
 }
