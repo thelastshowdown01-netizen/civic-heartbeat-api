@@ -155,7 +155,7 @@ export default function AdminIssueReview() {
   // Auth guard
   if (authLoading) {
     return (
-      <DashboardLayout>
+      <DashboardLayout title="Loading...">
         <div className="flex items-center justify-center py-20">
           <Skeleton className="h-8 w-48" />
         </div>
