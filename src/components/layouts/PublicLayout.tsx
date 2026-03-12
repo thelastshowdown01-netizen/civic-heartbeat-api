@@ -34,8 +34,9 @@ const PublicLayout = ({ children, fullWidth }: PublicLayoutProps) => {
 
   // Authority users don't see citizen-only links (Report, My Reports)
   const authorityLinks = [
-    { to: "/authority", label: "Authority Dashboard" },
-    { to: "/issues", label: "Explore Issues" },
+    { to: "/authority", label: "Reports" },
+    { to: "/authority/feed", label: "Live Feed" },
+    { to: "/authority/merged", label: "Merged Issues" },
   ];
 
   const navLinks = !user

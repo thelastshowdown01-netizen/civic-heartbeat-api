@@ -15,12 +15,18 @@ const Navbar = () => {
           <span className="text-xl font-bold text-primary">🏙️ Sustain City</span>
         </Link>
         <div className="flex items-center gap-3">
-          <a href="#issues" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors hidden sm:inline">
-            Explore Issues
-          </a>
-          <a href="#how-it-works" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors hidden sm:inline">
-            How It Works
-          </a>
+          {user && userRole === "authority" ? (
+            <>
+              <Link to="/authority" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors hidden sm:inline">Reports</Link>
+              <Link to="/authority/feed" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors hidden sm:inline">Live Feed</Link>
+              <Link to="/authority/merged" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors hidden sm:inline">Merged Issues</Link>
+            </>
+          ) : (
+            <>
+              <a href="#issues" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors hidden sm:inline">Explore Issues</a>
+              <a href="#how-it-works" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors hidden sm:inline">How It Works</a>
+            </>
+          )}
            {loading ? null : user ? (
             <>
               {userRole !== "authority" && (
@@ -36,11 +42,6 @@ const Navbar = () => {
                   </span>
                 )}
               </Link>
-              {userRole === "authority" && (
-                <Link to="/authority" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors hidden sm:inline">
-                  Dashboard
-                </Link>
-              )}
               <span className="text-xs text-muted-foreground hidden md:inline border border-border rounded-full px-2 py-0.5">
                 {roleLoading ? "…" : userRole}
               </span>
