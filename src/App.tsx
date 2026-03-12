@@ -15,6 +15,7 @@ import IssueDetails from "./pages/IssueDetails";
 import AdminDashboard from "./pages/AdminDashboard";
 import AdminIssueReview from "./pages/AdminIssueReview";
 import UserDashboard from "./pages/UserDashboard";
+import Notifications from "./pages/Notifications";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -33,6 +34,7 @@ const App = () => (
             <Route path="/forgot-password" element={<ForgotPassword />} />
             <Route path="/reset-password" element={<ResetPassword />} />
             <Route path="/dashboard" element={<UserDashboard />} />
+            <Route path="/notifications" element={<Notifications />} />
             <Route path="/report" element={<ReportIssue />} />
             <Route path="/issues" element={<ExploreIssues />} />
             <Route path="/issues/:id" element={<IssueDetails />} />

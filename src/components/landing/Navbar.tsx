@@ -1,9 +1,12 @@
 import { Link } from "react-router-dom";
+import { Bell } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
+import { useUnreadCount } from "@/hooks/useNotifications";
 import { Button } from "@/components/ui/button";
 
 const Navbar = () => {
   const { user, loading, signOut, userRole } = useAuth();
+  const { data: unreadCount } = useUnreadCount();
 
   return (
     <nav className="sticky top-0 z-50 border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -22,6 +25,14 @@ const Navbar = () => {
             <>
               <Link to="/dashboard" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors hidden sm:inline">
                 My Reports
+              </Link>
+              <Link to="/notifications" className="relative text-muted-foreground hover:text-foreground transition-colors">
+                <Bell className="h-4.5 w-4.5" />
+                {(unreadCount ?? 0) > 0 && (
+                  <span className="absolute -top-1.5 -right-1.5 h-4 min-w-4 flex items-center justify-center rounded-full bg-destructive text-destructive-foreground text-[10px] font-bold px-1">
+                    {unreadCount! > 9 ? "9+" : unreadCount}
+                  </span>
+                )}
               </Link>
               {userRole === "admin" && (
                 <Link to="/admin" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors hidden sm:inline">
