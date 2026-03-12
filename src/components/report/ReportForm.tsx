@@ -38,6 +38,7 @@ interface ReportFormProps {
 
 const ReportForm = ({ onSuccess }: ReportFormProps) => {
   const { session } = useAuth();
+  const queryClient = useQueryClient();
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [uploading, setUploading] = useState(false);
