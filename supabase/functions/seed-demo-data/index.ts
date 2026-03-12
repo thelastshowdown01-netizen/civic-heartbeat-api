@@ -17,10 +17,30 @@ Deno.serve(async (req) => {
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
     );
 
+    // Always ensure demo user roles exist (even if issues data exists)
+    const demoRoleEmails = [
+      { email: "admin@demo.sustaincity.in", role: "admin" },
+      { email: "authority@demo.sustaincity.in", role: "authority" },
+      { email: "authority2@demo.sustaincity.in", role: "authority" },
+      { email: "citizen1@demo.sustaincity.in", role: "citizen" },
+      { email: "citizen2@demo.sustaincity.in", role: "citizen" },
+      { email: "citizen3@demo.sustaincity.in", role: "citizen" },
+    ];
+    const { data: listData } = await admin.auth.admin.listUsers();
+    for (const dr of demoRoleEmails) {
+      const existing = listData?.users?.find((x: any) => x.email === dr.email);
+      if (existing) {
+        await admin.from("user_roles").upsert(
+          { user_id: existing.id, role: dr.role },
+          { onConflict: "user_id,role" }
+        );
+      }
+    }
+
     // Check if data already exists
     const { count } = await admin.from("issues").select("id", { count: "exact", head: true });
     if ((count ?? 0) > 0) {
-      return new Response(JSON.stringify({ message: "Demo data already exists", count }), {
+      return new Response(JSON.stringify({ message: "Demo data already exists, roles ensured", count }), {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
