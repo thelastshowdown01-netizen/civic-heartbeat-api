@@ -42,7 +42,7 @@ export function useIssueFeed(filters: FeedFilters = {}) {
       let query = supabase
         .from("issues")
         .select(
-          "id, title, description, category, image_url, pincode, status, priority, priority_score, upvotes_count, downvotes_count, reports_count, authority_name, created_at, latitude, longitude",
+        "id, title, description, category, pincode, status, priority, priority_score, upvotes_count, downvotes_count, reports_count, authority_name, created_at, latitude, longitude",
           { count: "exact" }
         );
 
