@@ -7,6 +7,7 @@ type AuthContextType = {
   user: User | null;
   userRole: string | null;
   loading: boolean;
+  roleLoading: boolean;
   signOut: () => Promise<void>;
 };
 
