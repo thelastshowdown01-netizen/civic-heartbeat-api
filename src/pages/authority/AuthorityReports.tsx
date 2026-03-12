@@ -6,7 +6,7 @@ import {
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
-import DashboardLayout from "@/components/layouts/DashboardLayout";
+import PublicLayout from "@/components/layouts/PublicLayout";
 import { StatCard } from "@/components/ui/stat-card";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -59,19 +59,19 @@ export default function AuthorityReports() {
 
   if (authLoading || (!user && !authLoading)) {
     return (
-      <DashboardLayout title="Reports" icon={<FileText className="h-5 w-5" />}>
+      <PublicLayout>
         <div className="space-y-6">
           <Skeleton className="h-10 w-64" />
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {Array.from({ length: 3 }).map((_, i) => <Skeleton key={i} className="h-28" />)}
           </div>
         </div>
-      </DashboardLayout>
+      </PublicLayout>
     );
   }
 
   return (
-    <DashboardLayout title="Reports" icon={<FileText className="h-5 w-5" />}>
+    <PublicLayout>
       <div className="space-y-6">
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <StatCard
@@ -126,6 +126,6 @@ export default function AuthorityReports() {
           </CardContent>
         </Card>
       </div>
-    </DashboardLayout>
+    </PublicLayout>
   );
 }

@@ -5,7 +5,7 @@ import { Loader2, ClipboardList, FileText } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
-import DashboardLayout from "@/components/layouts/DashboardLayout";
+import PublicLayout from "@/components/layouts/PublicLayout";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Textarea } from "@/components/ui/textarea";
@@ -93,16 +93,16 @@ export default function AuthorityMerged() {
 
   if (authLoading || (!user && !authLoading)) {
     return (
-      <DashboardLayout title="Merged Issues" icon={<ClipboardList className="h-5 w-5" />}>
+      <PublicLayout>
         <div className="space-y-3">
           {Array.from({ length: 3 }).map((_, i) => <Skeleton key={i} className="h-32" />)}
         </div>
-      </DashboardLayout>
+      </PublicLayout>
     );
   }
 
   return (
-    <DashboardLayout title="Merged Issues" icon={<ClipboardList className="h-5 w-5" />}>
+    <PublicLayout>
       <div className="space-y-4">
         <p className="text-sm text-muted-foreground">
           Issues reported by multiple citizens that were automatically merged based on location and description similarity.
@@ -161,6 +161,6 @@ export default function AuthorityMerged() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
-    </DashboardLayout>
+    </PublicLayout>
   );
 }

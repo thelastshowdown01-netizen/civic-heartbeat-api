@@ -7,7 +7,7 @@ import {
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
-import DashboardLayout from "@/components/layouts/DashboardLayout";
+import PublicLayout from "@/components/layouts/PublicLayout";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Textarea } from "@/components/ui/textarea";
@@ -115,16 +115,16 @@ export default function AuthorityFeed() {
 
   if (authLoading || (!user && !authLoading)) {
     return (
-      <DashboardLayout title="Live Feed" icon={<Activity className="h-5 w-5" />}>
+      <PublicLayout>
         <div className="space-y-3">
           {Array.from({ length: 4 }).map((_, i) => <Skeleton key={i} className="h-32" />)}
         </div>
-      </DashboardLayout>
+      </PublicLayout>
     );
   }
 
   return (
-    <DashboardLayout title="Live Feed" icon={<Activity className="h-5 w-5" />}>
+    <PublicLayout>
       <div className="space-y-4">
         {/* Filters */}
         <div className="flex flex-wrap items-center gap-3 p-3 bg-muted/50 rounded-lg border border-border">
@@ -225,6 +225,6 @@ export default function AuthorityFeed() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
-    </DashboardLayout>
+    </PublicLayout>
   );
 }
