@@ -315,7 +315,7 @@ Deno.serve(async (req) => {
 
     // Notifications
     const notifications = [
-      { user_id: citizen1, issue_id: insertedIssues[0].id, message: "Your issue \"Major sewer overflow near Dadar station\" has been verified by the admin team.", type: "issue_verified", is_read: true, created_at: daysAgo(7) },
+      { user_id: citizen1, issue_id: insertedIssues[0].id, message: "Your issue \"Major sewer overflow near Dadar station\" has been verified by the responsible authority.", type: "issue_verified", is_read: true, created_at: daysAgo(7) },
       { user_id: citizen1, issue_id: insertedIssues[0].id, message: "Municipal Water Dept has been assigned to your sewer overflow issue near Dadar station.", type: "authority_assigned", is_read: true, created_at: daysAgo(6) },
       { user_id: citizen1, issue_id: insertedIssues[0].id, message: "Status update: Sewer overflow issue is now in progress. Repair crew is on site.", type: "status_changed", is_read: false, created_at: daysAgo(3) },
       { user_id: citizen1, issue_id: insertedIssues[6].id, message: "Great news! The blocked storm drain issue at Dadar TT has been resolved.", type: "issue_resolved", is_read: false, created_at: daysAgo(4) },
