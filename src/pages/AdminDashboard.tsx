@@ -327,7 +327,7 @@ export default function AdminDashboard() {
             )}
           </TabsContent>
         </Tabs>
-      </main>
+      </div>
 
       <AdminActionDialog
         action={dialogAction}
