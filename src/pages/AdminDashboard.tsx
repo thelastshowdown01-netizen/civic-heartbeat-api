@@ -86,9 +86,9 @@ export default function AdminDashboard() {
     queryFn: async () => {
       let query = supabase.from("issues").select("*", { count: "exact" });
 
-      if (statusFilter !== "all") query = query.eq("status", statusFilter);
-      if (categoryFilter !== "all") query = query.eq("category", categoryFilter);
-      if (priorityFilter !== "all") query = query.eq("priority", priorityFilter);
+      if (statusFilter !== "all") query = query.eq("status", statusFilter as any);
+      if (categoryFilter !== "all") query = query.eq("category", categoryFilter as any);
+      if (priorityFilter !== "all") query = query.eq("priority", priorityFilter as any);
       if (pincodeFilter.trim()) query = query.eq("pincode", pincodeFilter.trim());
 
       switch (sortBy) {
