@@ -216,6 +216,14 @@ Deno.serve(async (req) => {
         changed_by_id: user.id,
         new_status: "reported",
       });
+
+      // Notify the reporter that their issue was created
+      await adminClient.from("notifications").insert({
+        user_id: user.id,
+        issue_id: issueId,
+        message: "Your issue has been submitted and is under review.",
+        type: "issue_created",
+      });
     }
 
     // --- Always store raw report ---

@@ -151,12 +151,22 @@ Deno.serve(async (req) => {
           rejected: "Your reported issue was reviewed and could not be verified.",
         };
 
+        const statusToType: Record<string, string> = {
+          verified: "issue_verified",
+          assigned: "authority_assigned",
+          in_progress: "status_changed",
+          resolved: "issue_resolved",
+          rejected: "issue_rejected",
+        };
+
         const message = statusMessages[effectiveStatus] || `Issue status updated to ${effectiveStatus}.`;
+        const notifType = statusToType[effectiveStatus] || "status_changed";
 
         const notifications = uniqueReporterIds.map((uid) => ({
           user_id: uid,
           issue_id,
           message,
+          type: notifType,
         }));
 
         await adminClient.from("notifications").insert(notifications);
