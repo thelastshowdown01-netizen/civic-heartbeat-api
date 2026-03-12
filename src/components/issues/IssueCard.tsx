@@ -114,9 +114,11 @@ export default function IssueCard({ issue, userVote, onVoteUpdate }: Props) {
             {categoryIcons[issue.category] ?? "📋"}
           </span>
           <div className="min-w-0 flex-1">
-            <h3 className="font-semibold text-foreground leading-snug line-clamp-1">
-              {issue.title || formatCategory(issue.category)}
-            </h3>
+            <Link to={`/issues/${issue.id}`} className="hover:underline">
+              <h3 className="font-semibold text-foreground leading-snug line-clamp-1">
+                {issue.title || formatCategory(issue.category)}
+              </h3>
+            </Link>
             <p className="text-sm text-muted-foreground line-clamp-2 mt-1">
               {issue.description}
             </p>
