@@ -5,7 +5,7 @@ import { useUnreadCount } from "@/hooks/useNotifications";
 import { Button } from "@/components/ui/button";
 
 const Navbar = () => {
-  const { user, loading, signOut, userRole } = useAuth();
+  const { user, loading, signOut, userRole, roleLoading } = useAuth();
   const { data: unreadCount } = useUnreadCount();
 
   return (
@@ -45,7 +45,7 @@ const Navbar = () => {
                 </Link>
               )}
               <span className="text-xs text-muted-foreground hidden md:inline border border-border rounded-full px-2 py-0.5">
-                {userRole}
+                {roleLoading ? "…" : userRole}
               </span>
               <Button variant="outline" size="sm" onClick={signOut}>
                 Sign Out

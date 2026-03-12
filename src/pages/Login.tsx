@@ -21,13 +21,22 @@ const Login = () => {
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
+    const { error, data } = await supabase.auth.signInWithPassword({ email, password });
     setLoading(false);
     if (error) {
       toast.error(error.message);
     } else {
       toast.success("Logged in successfully");
-      navigate("/");
+      // Fetch role to navigate to correct dashboard
+      const { data: roleData } = await supabase
+        .from("user_roles")
+        .select("role")
+        .eq("user_id", data.user.id)
+        .maybeSingle();
+      const role = roleData?.role ?? "citizen";
+      if (role === "admin") navigate("/admin");
+      else if (role === "authority") navigate("/authority");
+      else navigate("/dashboard");
     }
   };
 
