@@ -1,8 +1,8 @@
 import { ReactNode } from "react";
 import { Link } from "react-router-dom";
 import {
-  Shield, Building2, Search, Bell, LogOut, LayoutDashboard,
-  ClipboardList, Eye, FileText,
+  Building2, Search, Bell, LogOut, LayoutDashboard,
+  ClipboardList,
 } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { useUnreadCount } from "@/hooks/useNotifications";
@@ -28,22 +28,15 @@ interface DashboardLayoutProps {
   icon?: ReactNode;
 }
 
-const adminNavItems = [
-  { to: "/admin", label: "Dashboard", icon: LayoutDashboard },
-  { to: "/issues", label: "Explore Issues", icon: Search },
-];
-
 const authorityNavItems = [
-  { to: "/authority", label: "Work Queue", icon: ClipboardList },
+  { to: "/authority", label: "Dashboard", icon: LayoutDashboard },
   { to: "/issues", label: "Explore Issues", icon: Search },
 ];
 
 function DashboardSidebar() {
-  const { userRole, signOut } = useAuth();
+  const { signOut } = useAuth();
   const { state } = useSidebar();
   const collapsed = state === "collapsed";
-  const navItems = userRole === "admin" ? adminNavItems : authorityNavItems;
-  const RoleIcon = userRole === "admin" ? Shield : Building2;
 
   return (
     <Sidebar collapsible="icon">
@@ -60,19 +53,19 @@ function DashboardSidebar() {
 
         <SidebarGroup>
           <SidebarGroupLabel>
-            <RoleIcon className="h-3.5 w-3.5 mr-1" />
+            <Building2 className="h-3.5 w-3.5 mr-1" />
             {!collapsed && (
-              <span className="capitalize">{userRole}</span>
+              <span>Authority</span>
             )}
           </SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {navItems.map((item) => (
+              {authorityNavItems.map((item) => (
                 <SidebarMenuItem key={item.to}>
                   <SidebarMenuButton asChild>
                     <NavLink
                       to={item.to}
-                      end={item.to === "/admin" || item.to === "/authority"}
+                      end={item.to === "/authority"}
                       className="hover:bg-sidebar-accent"
                       activeClassName="bg-sidebar-accent text-sidebar-accent-foreground font-medium"
                     >

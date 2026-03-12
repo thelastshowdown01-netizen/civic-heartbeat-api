@@ -19,7 +19,7 @@ Deno.serve(async (req) => {
 
     // Always ensure demo user roles exist (even if issues data exists)
     const demoRoleEmails = [
-      { email: "admin@demo.sustaincity.in", role: "admin" },
+      { email: "admin@demo.sustaincity.in", role: "authority" },
       { email: "authority@demo.sustaincity.in", role: "authority" },
       { email: "authority2@demo.sustaincity.in", role: "authority" },
       { email: "citizen1@demo.sustaincity.in", role: "citizen" },
@@ -50,7 +50,7 @@ Deno.serve(async (req) => {
       { email: "citizen1@demo.sustaincity.in", password: "DemoPass123!", name: "Priya Sharma", role: "citizen" },
       { email: "citizen2@demo.sustaincity.in", password: "DemoPass123!", name: "Rahul Verma", role: "citizen" },
       { email: "citizen3@demo.sustaincity.in", password: "DemoPass123!", name: "Anita Desai", role: "citizen" },
-      { email: "admin@demo.sustaincity.in", password: "DemoPass123!", name: "Suresh Kumar", role: "admin" },
+      { email: "admin@demo.sustaincity.in", password: "DemoPass123!", name: "Suresh Kumar", role: "authority" },
       { email: "authority@demo.sustaincity.in", password: "DemoPass123!", name: "Municipal Water Dept", role: "authority" },
       { email: "authority2@demo.sustaincity.in", password: "DemoPass123!", name: "PWD Roads Division", role: "authority" },
     ];
@@ -277,7 +277,7 @@ Deno.serve(async (req) => {
 
       if (["verified", "assigned", "in_progress", "resolved"].includes(d.status)) {
         statusLogs.push({
-          issue_id: iss.id, changed_by_id: adminId,
+          issue_id: iss.id, changed_by_id: authority1,
           old_status: "reported", new_status: "verified",
           comment: "Issue verified after review. Forwarding to relevant department.",
           created_at: daysAgo(Math.max(0, Math.floor(Math.random() * 3) + 5)),
@@ -286,7 +286,7 @@ Deno.serve(async (req) => {
 
       if (["assigned", "in_progress", "resolved"].includes(d.status)) {
         statusLogs.push({
-          issue_id: iss.id, changed_by_id: adminId,
+          issue_id: iss.id, changed_by_id: authority1,
           old_status: "verified", new_status: "assigned",
           comment: `Assigned to ${d.authority_name ?? "relevant department"}.`,
           created_at: daysAgo(Math.max(0, Math.floor(Math.random() * 2) + 3)),
@@ -315,7 +315,7 @@ Deno.serve(async (req) => {
 
     // Notifications
     const notifications = [
-      { user_id: citizen1, issue_id: insertedIssues[0].id, message: "Your issue \"Major sewer overflow near Dadar station\" has been verified by the admin team.", type: "issue_verified", is_read: true, created_at: daysAgo(7) },
+      { user_id: citizen1, issue_id: insertedIssues[0].id, message: "Your issue \"Major sewer overflow near Dadar station\" has been verified by the responsible authority.", type: "issue_verified", is_read: true, created_at: daysAgo(7) },
       { user_id: citizen1, issue_id: insertedIssues[0].id, message: "Municipal Water Dept has been assigned to your sewer overflow issue near Dadar station.", type: "authority_assigned", is_read: true, created_at: daysAgo(6) },
       { user_id: citizen1, issue_id: insertedIssues[0].id, message: "Status update: Sewer overflow issue is now in progress. Repair crew is on site.", type: "status_changed", is_read: false, created_at: daysAgo(3) },
       { user_id: citizen1, issue_id: insertedIssues[6].id, message: "Great news! The blocked storm drain issue at Dadar TT has been resolved.", type: "issue_resolved", is_read: false, created_at: daysAgo(4) },
@@ -342,7 +342,6 @@ Deno.serve(async (req) => {
         },
         demo_credentials: {
           citizen: { email: "citizen1@demo.sustaincity.in", password: "DemoPass123!" },
-          admin: { email: "admin@demo.sustaincity.in", password: "DemoPass123!" },
           authority: { email: "authority@demo.sustaincity.in", password: "DemoPass123!" },
         },
       }),

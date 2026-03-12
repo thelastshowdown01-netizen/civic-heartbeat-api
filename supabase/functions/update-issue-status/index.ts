@@ -8,7 +8,7 @@ const corsHeaders = {
 
 const VALID_TRANSITIONS: Record<string, string[]> = {
   reported: ["verified", "rejected"],
-  verified: ["assigned", "rejected"],
+  verified: ["assigned", "in_progress", "rejected"],
   assigned: ["in_progress", "rejected"],
   in_progress: ["resolved"],
   resolved: [],
@@ -45,18 +45,17 @@ Deno.serve(async (req) => {
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
     );
 
-    // Check roles
+    // Check roles - only authority can update status
     const { data: roles } = await adminClient
       .from("user_roles")
       .select("role")
       .eq("user_id", user.id);
 
     const userRoles = roles?.map((r) => r.role) || [];
-    const isAdmin = userRoles.includes("admin");
     const isAuthority = userRoles.includes("authority");
 
-    if (!isAdmin && !isAuthority) {
-      return json({ error: "Forbidden: admin or authority role required" }, 403);
+    if (!isAuthority) {
+      return json({ error: "Forbidden: authority role required" }, 403);
     }
 
     const { issue_id, new_status, comment, assignee_id, authority_name } = await req.json();
@@ -72,18 +71,6 @@ Deno.serve(async (req) => {
 
     if (!issue) return json({ error: "Issue not found" }, 404);
 
-    // Authority can only update their assigned issues
-    if (isAuthority && !isAdmin) {
-      const { data: assignedIssue } = await adminClient
-        .from("issues")
-        .select("id")
-        .eq("id", issue_id)
-        .eq("assignee_id", user.id)
-        .maybeSingle();
-
-      if (!assignedIssue) return json({ error: "Not assigned to this issue" }, 403);
-    }
-
     // Determine effective new status
     let effectiveStatus = new_status;
 
@@ -92,7 +79,6 @@ Deno.serve(async (req) => {
       if (issue.status === "verified") {
         effectiveStatus = "assigned";
       } else {
-        // Just updating assignee without status change
         effectiveStatus = null;
       }
     }
@@ -115,7 +101,7 @@ Deno.serve(async (req) => {
     // Build update payload
     const updateData: Record<string, unknown> = {};
     if (effectiveStatus) updateData.status = effectiveStatus;
-    if (assignee_id && isAdmin) updateData.assignee_id = assignee_id;
+    if (assignee_id) updateData.assignee_id = assignee_id;
     if (authority_name !== undefined) updateData.authority_name = authority_name;
     if (effectiveStatus === "resolved") updateData.resolved_at = new Date().toISOString();
 
@@ -144,8 +130,8 @@ Deno.serve(async (req) => {
       if (reporters && reporters.length > 0) {
         const uniqueReporterIds = [...new Set(reporters.map((r) => r.reporter_id))];
         const statusMessages: Record<string, string> = {
-          verified: "Your reported issue has been verified by an admin.",
-          assigned: "An authority has been assigned to your reported issue.",
+          verified: "Your reported issue has been verified by the responsible authority.",
+          assigned: "A department has been assigned to your reported issue.",
           in_progress: "Work has begun on your reported issue.",
           resolved: "Your reported issue has been resolved!",
           rejected: "Your reported issue was reviewed and could not be verified.",

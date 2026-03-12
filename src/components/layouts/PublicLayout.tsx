@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { useState } from "react";
-import { Menu, Bell, Plus, Search, LogOut } from "lucide-react";
+import { Menu, Bell, LogOut } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { useUnreadCount } from "@/hooks/useNotifications";
 import { NavLink } from "@/components/NavLink";
@@ -24,7 +24,6 @@ const PublicLayout = ({ children, fullWidth }: PublicLayoutProps) => {
 
   const publicLinks = [
     { to: "/issues", label: "Explore Issues" },
-    { to: "/report", label: "Report an Issue" },
   ];
 
   const citizenLinks = [
@@ -33,15 +32,17 @@ const PublicLayout = ({ children, fullWidth }: PublicLayoutProps) => {
     { to: "/dashboard", label: "My Reports" },
   ];
 
-  const navLinks = user ? citizenLinks : publicLinks;
+  // Authority users don't see citizen-only links (Report, My Reports)
+  const authorityLinks = [
+    { to: "/authority", label: "Authority Dashboard" },
+    { to: "/issues", label: "Explore Issues" },
+  ];
 
-  // Redirect admin/authority to their dashboards from nav
-  const roleLink =
-    userRole === "admin"
-      ? { to: "/admin", label: "Admin Dashboard" }
-      : userRole === "authority"
-      ? { to: "/authority", label: "Work Queue" }
-      : null;
+  const navLinks = !user
+    ? publicLinks
+    : userRole === "authority"
+    ? authorityLinks
+    : citizenLinks;
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
@@ -67,15 +68,6 @@ const PublicLayout = ({ children, fullWidth }: PublicLayoutProps) => {
                   {link.label}
                 </NavLink>
               ))}
-              {roleLink && (
-                <NavLink
-                  to={roleLink.to}
-                  className="px-3 py-1.5 text-sm font-medium text-muted-foreground hover:text-foreground rounded-md transition-colors"
-                  activeClassName="text-foreground bg-muted"
-                >
-                  {roleLink.label}
-                </NavLink>
-              )}
             </div>
           </div>
 
@@ -172,16 +164,6 @@ const PublicLayout = ({ children, fullWidth }: PublicLayoutProps) => {
                     {unreadCount! > 9 ? "9+" : unreadCount}
                   </span>
                 )}
-              </NavLink>
-            )}
-            {roleLink && (
-              <NavLink
-                to={roleLink.to}
-                className="px-4 py-3 text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
-                activeClassName="text-foreground bg-muted border-l-2 border-l-primary"
-                onClick={() => setMobileOpen(false)}
-              >
-                {roleLink.label}
               </NavLink>
             )}
 
