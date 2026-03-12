@@ -97,7 +97,7 @@ const ReportIssue = () => {
           </div>
         </div>
       </div>
-    </div>
+    </PublicLayout>
   );
 };
 
