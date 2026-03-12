@@ -13,6 +13,7 @@ import ReportIssue from "./pages/ReportIssue";
 import ExploreIssues from "./pages/ExploreIssues";
 import IssueDetails from "./pages/IssueDetails";
 import AdminDashboard from "./pages/AdminDashboard";
+import AuthorityDashboard from "./pages/AuthorityDashboard";
 import AdminIssueReview from "./pages/AdminIssueReview";
 import UserDashboard from "./pages/UserDashboard";
 import Notifications from "./pages/Notifications";
