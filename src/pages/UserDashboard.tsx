@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-import { formatDistanceToNow, format } from "date-fns";
+import { formatDistanceToNow } from "date-fns";
 import {
   FileText, CheckCircle2, AlertTriangle, Activity, Filter, ArrowUpDown,
   MapPin, Clock, Building2, Users, ChevronRight, Bell, Plus,
@@ -16,11 +16,15 @@ import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Constants } from "@/integrations/supabase/types";
+import { PageHeader } from "@/components/ui/page-header";
+import { StatCard } from "@/components/ui/stat-card";
+import { EmptyState } from "@/components/ui/empty-state";
 import {
   formatCategory,
   formatStatus,
   statusColors,
   priorityColors,
+  categoryIcons,
 } from "@/lib/issueHelpers";
 
 type ReportWithIssue = {
