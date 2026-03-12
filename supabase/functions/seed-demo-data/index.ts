@@ -38,6 +38,7 @@ Deno.serve(async (req) => {
     const userIds: Record<string, string> = {};
 
     for (const u of demoUsers) {
+      // Try to create user, if exists fetch by email
       const { data: authData, error: authErr } = await admin.auth.admin.createUser({
         email: u.email,
         password: u.password,
@@ -45,7 +46,17 @@ Deno.serve(async (req) => {
         user_metadata: { full_name: u.name, role: u.role },
       });
       if (authErr) {
-        console.error(`Failed to create user ${u.email}:`, authErr.message);
+        // User may already exist - try to find them
+        const { data: listData } = await admin.auth.admin.listUsers();
+        const existing = listData?.users?.find((x: any) => x.email === u.email);
+        if (existing) {
+          userIds[u.email] = existing.id;
+          // Ensure role exists
+          await admin.from("user_roles").upsert({ user_id: existing.id, role: u.role }, { onConflict: "user_id" });
+          await admin.from("profiles").upsert({ id: existing.id, full_name: u.name, email: u.email }, { onConflict: "id" });
+        } else {
+          console.error(`Failed to create user ${u.email}:`, authErr.message);
+        }
         continue;
       }
       const uid = authData.user.id;
