@@ -1,4 +1,5 @@
 import { useState, useRef, useCallback } from "react";
+import { useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -37,6 +38,7 @@ interface ReportFormProps {
 
 const ReportForm = ({ onSuccess }: ReportFormProps) => {
   const { session } = useAuth();
+  const queryClient = useQueryClient();
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [uploading, setUploading] = useState(false);
@@ -116,6 +118,8 @@ const ReportForm = ({ onSuccess }: ReportFormProps) => {
       });
 
       if (error) throw error;
+      queryClient.invalidateQueries({ queryKey: ["issue-feed"] });
+      queryClient.invalidateQueries({ queryKey: ["my-reports"] });
       onSuccess(data as SubmissionResult);
     } catch (err: any) {
       form.setError("root", { message: err.message || "Something went wrong. Please try again." });

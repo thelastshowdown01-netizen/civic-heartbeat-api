@@ -22,6 +22,7 @@ import {
   formatCategory, formatStatus, statusColors, priorityColors,
 } from "@/lib/issueHelpers";
 import StatusTimeline from "@/components/issues/StatusTimeline";
+import DashboardLayout from "@/components/layouts/DashboardLayout";
 
 const categoryIcons: Record<string, string> = {
   pothole: "🕳️", garbage: "🗑️", sewer_overflow: "🚰", water_leakage: "💧",
@@ -154,27 +155,31 @@ export default function AdminIssueReview() {
   // Auth guard
   if (authLoading) {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
-        <Skeleton className="h-8 w-48" />
-      </div>
+      <DashboardLayout title="Loading...">
+        <div className="flex items-center justify-center py-20">
+          <Skeleton className="h-8 w-48" />
+        </div>
+      </DashboardLayout>
     );
   }
 
   if (userRole !== "admin") {
     return (
-      <div className="min-h-screen bg-background flex flex-col items-center justify-center gap-4">
-        <Shield className="h-12 w-12 text-muted-foreground" />
-        <h2 className="text-xl font-semibold text-foreground">Access Denied</h2>
-        <p className="text-muted-foreground">Admin access required.</p>
-        <Button asChild variant="outline"><Link to="/">Go Home</Link></Button>
-      </div>
+      <DashboardLayout title="Access Denied">
+        <div className="flex flex-col items-center justify-center gap-4 py-20">
+          <Shield className="h-12 w-12 text-muted-foreground" />
+          <h2 className="text-xl font-semibold text-foreground">Access Denied</h2>
+          <p className="text-muted-foreground">Admin access required.</p>
+          <Button asChild variant="outline"><Link to="/">Go Home</Link></Button>
+        </div>
+      </DashboardLayout>
     );
   }
 
   if (issueLoading) {
     return (
-      <div className="min-h-screen bg-background">
-        <main className="max-w-6xl mx-auto px-4 pt-8 pb-16">
+      <DashboardLayout title="Loading Issue...">
+        <div className="max-w-6xl mx-auto">
           <Skeleton className="h-6 w-40 mb-6" />
           <Skeleton className="h-10 w-3/4 mb-4" />
           <div className="grid lg:grid-cols-3 gap-6">
@@ -184,18 +189,20 @@ export default function AdminIssueReview() {
             </div>
             <Skeleton className="h-96 rounded-lg" />
           </div>
-        </main>
-      </div>
+        </div>
+      </DashboardLayout>
     );
   }
 
   if (!issue) {
     return (
-      <div className="min-h-screen bg-background flex flex-col items-center justify-center gap-4">
-        <AlertTriangle className="h-12 w-12 text-muted-foreground" />
-        <h2 className="text-xl font-semibold">Issue Not Found</h2>
-        <Button asChild variant="outline"><Link to="/admin"><ArrowLeft className="h-4 w-4 mr-2" />Back to Dashboard</Link></Button>
-      </div>
+      <DashboardLayout title="Issue Not Found">
+        <div className="flex flex-col items-center justify-center gap-4 py-20">
+          <AlertTriangle className="h-12 w-12 text-muted-foreground" />
+          <h2 className="text-xl font-semibold">Issue Not Found</h2>
+          <Button asChild variant="outline"><Link to="/admin"><ArrowLeft className="h-4 w-4 mr-2" />Back to Dashboard</Link></Button>
+        </div>
+      </DashboardLayout>
     );
   }
 
@@ -210,8 +217,8 @@ export default function AdminIssueReview() {
     : null;
 
   return (
-    <div className="min-h-screen bg-background">
-      <main className="max-w-6xl mx-auto px-4 pt-8 pb-16">
+    <DashboardLayout title="Issue Review">
+      <div className="max-w-6xl mx-auto">
         {/* Back link */}
         <Link
           to="/admin"
@@ -678,7 +685,7 @@ export default function AdminIssueReview() {
             </Card>
           </div>
         </div>
-      </main>
-    </div>
+      </div>
+    </DashboardLayout>
   );
 }

@@ -68,6 +68,7 @@ export type Database = {
           description: string
           downvotes_count: number
           id: string
+          image_url: string | null
           latitude: number | null
           longitude: number | null
           pincode: string | null
@@ -89,6 +90,7 @@ export type Database = {
           description: string
           downvotes_count?: number
           id?: string
+          image_url?: string | null
           latitude?: number | null
           longitude?: number | null
           pincode?: string | null
@@ -110,6 +112,7 @@ export type Database = {
           description?: string
           downvotes_count?: number
           id?: string
+          image_url?: string | null
           latitude?: number | null
           longitude?: number | null
           pincode?: string | null
