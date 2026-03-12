@@ -123,7 +123,7 @@ Deno.serve(async (req) => {
         await adminClient
           .from("votes")
           .update({ vote_type })
-          .eq("user_id", user.id)
+          .eq("user_id", userId)
           .eq("issue_id", issue_id);
         userVote = vote_type;
       }
