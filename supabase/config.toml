@@ -1,0 +1,10 @@
+project_id = "tuanhtanariacoczzhfs"
+
+[functions.submit-report]
+verify_jwt = false
+
+[functions.vote-issue]
+verify_jwt = false
+
+[functions.update-issue-status]
+verify_jwt = false
