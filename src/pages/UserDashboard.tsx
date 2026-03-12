@@ -50,15 +50,6 @@ type ReportWithIssue = {
   };
 };
 
-const categoryIcons: Record<string, string> = {
-  pothole: "🕳️",
-  garbage: "🗑️",
-  sewer_overflow: "🚰",
-  water_leakage: "💧",
-  street_light: "💡",
-  road_damage: "🚧",
-  other: "📋",
-};
 
 export default function UserDashboard() {
   const { user, loading: authLoading } = useAuth();
