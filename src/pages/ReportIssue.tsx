@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { GitMerge, BarChart3, UserCheck, Eye } from "lucide-react";
+import { PageHeader } from "@/components/ui/page-header";
 import { useAuth } from "@/hooks/useAuth";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -51,11 +52,10 @@ const ReportIssue = () => {
   return (
     <PublicLayout>
       <div className="max-w-6xl mx-auto">
-        {/* Header */}
-        <div className="mb-10 max-w-2xl">
-          <h1 className="text-3xl md:text-4xl font-bold text-foreground tracking-tight">Report a Civic Issue</h1>
-          <p className="mt-2 text-muted-foreground text-lg">Help improve your city — it takes under a minute.</p>
-        </div>
+        <PageHeader
+          title="Report a Civic Issue"
+          description="Help improve your city — it takes under a minute."
+        />
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
           {/* Form column */}

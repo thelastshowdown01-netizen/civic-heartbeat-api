@@ -192,8 +192,7 @@ export default function AdminDashboard() {
   return (
     <DashboardLayout title="Admin Dashboard" icon={<Shield className="h-5 w-5" />}>
       <div className="space-y-6">
-        {/* Subtitle */}
-        <p className="text-sm text-muted-foreground">
+        <p className="page-description">
           Monitor, manage, and resolve civic issues across the city.
         </p>
 

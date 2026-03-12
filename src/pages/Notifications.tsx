@@ -5,6 +5,9 @@ import {
   Bell, BellOff, CheckCheck, Filter, Info, ShieldCheck, UserCheck,
   ArrowRight, RefreshCw, XCircle, Activity, CheckCircle2, Plus,
 } from "lucide-react";
+import { PageHeader } from "@/components/ui/page-header";
+import { StatCard } from "@/components/ui/stat-card";
+import { EmptyState } from "@/components/ui/empty-state";
 import { useAuth } from "@/hooks/useAuth";
 import {
   useNotifications,
@@ -147,35 +150,27 @@ const Notifications = () => {
   return (
     <PublicLayout>
       <div className="max-w-4xl mx-auto space-y-8">
-        {/* Header */}
-        <div>
-          <h1 className="text-2xl font-bold text-foreground">Updates Center</h1>
-          <p className="text-muted-foreground mt-1">
-            Stay informed on the progress of your reported issues.
-          </p>
-        </div>
+        <PageHeader
+          title="Updates Center"
+          description="Stay informed on the progress of your reported issues."
+        />
 
         {/* Summary Cards */}
         {isLoading ? (
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div className="card-grid-4">
             {Array.from({ length: 4 }).map((_, i) => (
               <Skeleton key={i} className="h-24 rounded-lg" />
             ))}
           </div>
         ) : (
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div className="card-grid-4">
             {summaryCards.map((c) => (
-              <Card key={c.label}>
-                <CardHeader className="p-4 pb-2 flex-row items-center gap-2 space-y-0">
-                  <c.icon className={`h-4 w-4 ${c.color}`} />
-                  <CardTitle className="text-xs font-medium text-muted-foreground">
-                    {c.label}
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="p-4 pt-0">
-                  <p className="text-2xl font-bold text-foreground">{c.value}</p>
-                </CardContent>
-              </Card>
+              <StatCard
+                key={c.label}
+                label={c.label}
+                value={c.value}
+                icon={<c.icon className={`h-4 w-4 ${c.color}`} />}
+              />
             ))}
           </div>
         )}
@@ -219,30 +214,20 @@ const Notifications = () => {
             ))}
           </div>
         ) : filtered.length === 0 ? (
-          <Card className="border-dashed">
-            <CardContent className="p-12 text-center space-y-4">
-              <div className="mx-auto w-12 h-12 rounded-full bg-muted flex items-center justify-center">
-                <Bell className="h-6 w-6 text-muted-foreground" />
-              </div>
-              <div className="space-y-2">
-                <h3 className="text-lg font-semibold text-foreground">
-                  {filter === "unread" ? "All caught up!" : "No updates yet"}
-                </h3>
-                <p className="text-sm text-muted-foreground max-w-sm mx-auto">
-                  {filter === "unread"
-                    ? "You've read all your notifications. Check back later for new updates."
-                    : "You'll see issue progress and action updates here once you report a civic issue."}
-                </p>
-              </div>
-              {filter === "all" && (
-                <Link to="/report">
-                  <Button className="mt-2 gap-1">
-                    <Plus className="h-4 w-4" /> Report an Issue
-                  </Button>
-                </Link>
-              )}
-            </CardContent>
-          </Card>
+          <EmptyState
+            icon={<Bell className="h-7 w-7 text-muted-foreground" />}
+            title={filter === "unread" ? "All caught up!" : "No updates yet"}
+            description={filter === "unread"
+              ? "You've read all your notifications. Check back later for new updates."
+              : "You'll see issue progress and action updates here once you report a civic issue."}
+            action={filter === "all" ? (
+              <Link to="/report">
+                <Button className="gap-1">
+                  <Plus className="h-4 w-4" /> Report an Issue
+                </Button>
+              </Link>
+            ) : undefined}
+          />
         ) : (
           <div className="space-y-6">
             {renderGroup("Today", grouped.today)}

@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-import { formatDistanceToNow, format } from "date-fns";
+import { formatDistanceToNow } from "date-fns";
 import {
   FileText, CheckCircle2, AlertTriangle, Activity, Filter, ArrowUpDown,
   MapPin, Clock, Building2, Users, ChevronRight, Bell, Plus,
@@ -16,11 +16,15 @@ import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Constants } from "@/integrations/supabase/types";
+import { PageHeader } from "@/components/ui/page-header";
+import { StatCard } from "@/components/ui/stat-card";
+import { EmptyState } from "@/components/ui/empty-state";
 import {
   formatCategory,
   formatStatus,
   statusColors,
   priorityColors,
+  categoryIcons,
 } from "@/lib/issueHelpers";
 
 type ReportWithIssue = {
@@ -46,15 +50,6 @@ type ReportWithIssue = {
   };
 };
 
-const categoryIcons: Record<string, string> = {
-  pothole: "🕳️",
-  garbage: "🗑️",
-  sewer_overflow: "🚰",
-  water_leakage: "💧",
-  street_light: "💡",
-  road_damage: "🚧",
-  other: "📋",
-};
 
 export default function UserDashboard() {
   const { user, loading: authLoading } = useAuth();
@@ -139,32 +134,25 @@ export default function UserDashboard() {
   return (
     <PublicLayout>
       <div className="space-y-6">
-        {/* Header */}
-        <div className="flex items-start justify-between gap-4">
-          <div className="flex items-center gap-3">
-            <div className="p-2 rounded-lg bg-primary/10">
-              <FileText className="h-6 w-6 text-primary" />
-            </div>
-            <div>
-              <h1 className="text-2xl font-bold text-foreground">My Reports</h1>
-              <p className="text-sm text-muted-foreground">
-                Track the civic issues you've reported and stay informed on progress.
-              </p>
-            </div>
-          </div>
-          <Link to="/report">
-            <Button size="sm" className="gap-1.5">
-              <Plus className="h-4 w-4" /> Report Issue
-            </Button>
-          </Link>
-        </div>
+        <PageHeader
+          icon={<FileText className="h-6 w-6 text-primary" />}
+          title="My Reports"
+          description="Track the civic issues you've reported and stay informed on progress."
+          actions={
+            <Link to="/report">
+              <Button size="sm" className="gap-1.5">
+                <Plus className="h-4 w-4" /> Report Issue
+              </Button>
+            </Link>
+          }
+        />
 
         {/* Summary Cards */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-          <SummaryCard icon={FileText} label="Total Reports" value={stats.total} color="text-primary" />
-          <SummaryCard icon={Activity} label="Active" value={stats.active} color="text-info" />
-          <SummaryCard icon={CheckCircle2} label="Resolved" value={stats.resolved} color="text-primary" />
-          <SummaryCard icon={AlertTriangle} label="High Priority" value={stats.highPriority} color="text-destructive" />
+        <div className="card-grid-4">
+          <StatCard icon={<FileText className="h-5 w-5" />} label="Total Reports" value={stats.total} accent="text-primary" />
+          <StatCard icon={<Activity className="h-5 w-5" />} label="Active" value={stats.active} accent="text-info" />
+          <StatCard icon={<CheckCircle2 className="h-5 w-5" />} label="Resolved" value={stats.resolved} accent="text-primary" />
+          <StatCard icon={<AlertTriangle className="h-5 w-5" />} label="High Priority" value={stats.highPriority} accent="text-destructive" />
         </div>
 
         {/* Main content grid */}
@@ -233,25 +221,18 @@ export default function UserDashboard() {
               </div>
             ) : filteredReports.length === 0 ? (
               reports && reports.length === 0 ? (
-                /* True empty state */
-                <Card className="border-dashed">
-                  <CardContent className="py-16 text-center space-y-4">
-                    <div className="mx-auto w-14 h-14 rounded-full bg-muted flex items-center justify-center">
-                      <FileText className="h-7 w-7 text-muted-foreground" />
-                    </div>
-                    <div>
-                      <h3 className="font-semibold text-foreground text-lg">No reports yet</h3>
-                      <p className="text-sm text-muted-foreground mt-1 max-w-sm mx-auto">
-                        You haven't reported any civic issues yet. Start by reporting a problem in your area to make it visible and trackable.
-                      </p>
-                    </div>
+                <EmptyState
+                  icon={<FileText className="h-7 w-7 text-muted-foreground" />}
+                  title="No reports yet"
+                  description="You haven't reported any civic issues yet. Start by reporting a problem in your area to make it visible and trackable."
+                  action={
                     <Link to="/report">
-                      <Button className="gap-1.5 mt-2">
+                      <Button className="gap-1.5">
                         <Plus className="h-4 w-4" /> Report an Issue
                       </Button>
                     </Link>
-                  </CardContent>
-                </Card>
+                  }
+                />
               ) : (
                 /* Filter empty state */
                 <Card>
@@ -311,22 +292,6 @@ export default function UserDashboard() {
   );
 }
 
-/* ─── Summary Card ─── */
-function SummaryCard({ icon: Icon, label, value, color }: { icon: any; label: string; value: number; color: string }) {
-  return (
-    <Card>
-      <CardContent className="p-4 flex items-center gap-3">
-        <div className="p-2 rounded-lg bg-muted">
-          <Icon className={`h-5 w-5 ${color}`} />
-        </div>
-        <div>
-          <p className="text-2xl font-bold text-foreground">{value}</p>
-          <p className="text-xs text-muted-foreground">{label}</p>
-        </div>
-      </CardContent>
-    </Card>
-  );
-}
 
 /* ─── Report Card ─── */
 function ReportCard({ report }: { report: ReportWithIssue }) {
