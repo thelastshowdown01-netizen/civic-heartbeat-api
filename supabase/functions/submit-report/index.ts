@@ -169,9 +169,12 @@ Deno.serve(async (req) => {
       // Create new issue
       const { score, label } = calculatePriority(category, description, 1, 0, 0);
 
+      const title = description.length > 80 ? description.slice(0, 77) + "..." : description;
+
       const { data: newIssue, error: issueErr } = await adminClient
         .from("issues")
         .insert({
+          title,
           category,
           description,
           pincode,
@@ -179,6 +182,7 @@ Deno.serve(async (req) => {
           longitude,
           priority_score: score,
           priority: label,
+          created_by: user.id,
         })
         .select("id")
         .single();
