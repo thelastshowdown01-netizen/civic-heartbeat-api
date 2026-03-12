@@ -134,32 +134,25 @@ export default function UserDashboard() {
   return (
     <PublicLayout>
       <div className="space-y-6">
-        {/* Header */}
-        <div className="flex items-start justify-between gap-4">
-          <div className="flex items-center gap-3">
-            <div className="p-2 rounded-lg bg-primary/10">
-              <FileText className="h-6 w-6 text-primary" />
-            </div>
-            <div>
-              <h1 className="text-2xl font-bold text-foreground">My Reports</h1>
-              <p className="text-sm text-muted-foreground">
-                Track the civic issues you've reported and stay informed on progress.
-              </p>
-            </div>
-          </div>
-          <Link to="/report">
-            <Button size="sm" className="gap-1.5">
-              <Plus className="h-4 w-4" /> Report Issue
-            </Button>
-          </Link>
-        </div>
+        <PageHeader
+          icon={<FileText className="h-6 w-6 text-primary" />}
+          title="My Reports"
+          description="Track the civic issues you've reported and stay informed on progress."
+          actions={
+            <Link to="/report">
+              <Button size="sm" className="gap-1.5">
+                <Plus className="h-4 w-4" /> Report Issue
+              </Button>
+            </Link>
+          }
+        />
 
         {/* Summary Cards */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-          <SummaryCard icon={FileText} label="Total Reports" value={stats.total} color="text-primary" />
-          <SummaryCard icon={Activity} label="Active" value={stats.active} color="text-info" />
-          <SummaryCard icon={CheckCircle2} label="Resolved" value={stats.resolved} color="text-primary" />
-          <SummaryCard icon={AlertTriangle} label="High Priority" value={stats.highPriority} color="text-destructive" />
+        <div className="card-grid-4">
+          <StatCard icon={<FileText className="h-5 w-5" />} label="Total Reports" value={stats.total} accent="text-primary" />
+          <StatCard icon={<Activity className="h-5 w-5" />} label="Active" value={stats.active} accent="text-info" />
+          <StatCard icon={<CheckCircle2 className="h-5 w-5" />} label="Resolved" value={stats.resolved} accent="text-primary" />
+          <StatCard icon={<AlertTriangle className="h-5 w-5" />} label="High Priority" value={stats.highPriority} accent="text-destructive" />
         </div>
 
         {/* Main content grid */}
