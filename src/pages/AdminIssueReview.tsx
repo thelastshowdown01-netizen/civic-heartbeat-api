@@ -165,9 +165,10 @@ export default function AdminIssueReview() {
 
   if (userRole !== "admin") {
     return (
-      <div className="min-h-screen bg-background flex flex-col items-center justify-center gap-4">
-        <Shield className="h-12 w-12 text-muted-foreground" />
-        <h2 className="text-xl font-semibold text-foreground">Access Denied</h2>
+      <DashboardLayout>
+        <div className="flex flex-col items-center justify-center gap-4 py-20">
+          <Shield className="h-12 w-12 text-muted-foreground" />
+          <h2 className="text-xl font-semibold text-foreground">Access Denied</h2>
         <p className="text-muted-foreground">Admin access required.</p>
         <Button asChild variant="outline"><Link to="/">Go Home</Link></Button>
       </div>
