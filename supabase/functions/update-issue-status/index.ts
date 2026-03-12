@@ -115,7 +115,7 @@ Deno.serve(async (req) => {
     if (effectiveStatus) {
       await adminClient.from("status_logs").insert({
         issue_id,
-        changed_by_id: user.id,
+        changed_by_id: userId,
         old_status: issue.status,
         new_status: effectiveStatus,
         comment: comment || null,
