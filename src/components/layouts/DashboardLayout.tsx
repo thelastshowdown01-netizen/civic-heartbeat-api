@@ -1,8 +1,7 @@
 import { ReactNode } from "react";
 import { Link } from "react-router-dom";
 import {
-  Building2, Search, Bell, LogOut, LayoutDashboard,
-  ClipboardList,
+  Building2, Bell, LogOut, FileText, Activity, ClipboardList,
 } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { useUnreadCount } from "@/hooks/useNotifications";
