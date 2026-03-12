@@ -132,7 +132,7 @@ Deno.serve(async (req) => {
       if (vote_type === "up") upvotes++;
       else downvotes++;
       await adminClient.from("votes").insert({
-        user_id: user.id,
+        user_id: userId,
         issue_id,
         vote_type,
       });
