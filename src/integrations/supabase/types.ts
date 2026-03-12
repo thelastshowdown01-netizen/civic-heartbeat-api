@@ -306,6 +306,24 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      assign_authority: {
+        Args: {
+          p_assignee_id: string
+          p_authority_name: string
+          p_comment?: string
+          p_issue_id: string
+        }
+        Returns: Json
+      }
+      create_notification: {
+        Args: {
+          p_issue_id: string
+          p_message: string
+          p_type: Database["public"]["Enums"]["notification_type"]
+          p_user_id: string
+        }
+        Returns: string
+      }
       get_dashboard_stats: { Args: never; Returns: Json }
       has_role: {
         Args: {
@@ -313,6 +331,18 @@ export type Database = {
           _user_id: string
         }
         Returns: boolean
+      }
+      recalculate_issue_priority: {
+        Args: { p_issue_id: string }
+        Returns: undefined
+      }
+      refresh_issue_reports_count: {
+        Args: { p_issue_id: string }
+        Returns: undefined
+      }
+      refresh_issue_vote_counts: {
+        Args: { p_issue_id: string }
+        Returns: undefined
       }
     }
     Enums: {
