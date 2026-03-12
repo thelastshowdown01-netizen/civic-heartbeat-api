@@ -185,26 +185,17 @@ export default function AdminDashboard() {
             ))}
           </div>
         </div>
-      </>
+      </DashboardLayout>
     );
   }
 
   return (
-    <>
-      <Navbar />
-      <main className="max-w-7xl mx-auto px-4 py-8 space-y-6">
-        {/* Header */}
-        <div className="flex items-center gap-3">
-          <div className="p-2 rounded-lg bg-primary/10">
-            <Shield className="h-6 w-6 text-primary" />
-          </div>
-          <div>
-            <h1 className="text-2xl font-bold text-foreground">Admin Dashboard</h1>
-            <p className="text-sm text-muted-foreground">
-              Monitor, manage, and resolve civic issues across the city.
-            </p>
-          </div>
-        </div>
+    <DashboardLayout title="Admin Dashboard" icon={<Shield className="h-5 w-5" />}>
+      <div className="space-y-6">
+        {/* Subtitle */}
+        <p className="text-sm text-muted-foreground">
+          Monitor, manage, and resolve civic issues across the city.
+        </p>
 
         {/* Stats */}
         <AdminStatsCards />
