@@ -6,16 +6,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { toast } from "sonner";
-import { Eye, EyeOff, User, Shield, Building2 } from "lucide-react";
+import { Eye, EyeOff } from "lucide-react";
 import AuthLayout from "@/components/auth/AuthLayout";
-
-type Role = "citizen" | "admin" | "authority";
-
-const roles: { value: Role; label: string; icon: typeof User; desc: string }[] = [
-  { value: "citizen", label: "Citizen", icon: User, desc: "Report & track issues" },
-  { value: "admin", label: "Admin", icon: Shield, desc: "Manage & verify issues" },
-  { value: "authority", label: "Authority", icon: Building2, desc: "Resolve assigned issues" },
-];
 
 const Signup = () => {
   const [email, setEmail] = useState("");
