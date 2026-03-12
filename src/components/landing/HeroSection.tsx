@@ -47,6 +47,7 @@ const trustChips = [
 
 const HeroSection = () => {
   const { user } = useAuth();
+  const { activateDemo } = useDemo();
 
   return (
     <section className="relative max-w-6xl mx-auto px-4 py-20 md:py-28">
