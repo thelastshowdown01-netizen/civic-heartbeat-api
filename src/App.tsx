@@ -15,7 +15,9 @@ import ResetPassword from "./pages/ResetPassword";
 import ReportIssue from "./pages/ReportIssue";
 import ExploreIssues from "./pages/ExploreIssues";
 import IssueDetails from "./pages/IssueDetails";
-import AuthorityDashboard from "./pages/AuthorityDashboard";
+import AuthorityReports from "./pages/authority/AuthorityReports";
+import AuthorityFeed from "./pages/authority/AuthorityFeed";
+import AuthorityMerged from "./pages/authority/AuthorityMerged";
 import UserDashboard from "./pages/UserDashboard";
 import Notifications from "./pages/Notifications";
 import NotFound from "./pages/NotFound";
@@ -53,7 +55,9 @@ const App = () => (
             <Route path="/report" element={<ReportIssue />} />
             <Route path="/issues" element={<ExploreIssues />} />
             <Route path="/issues/:id" element={<IssueDetails />} />
-            <Route path="/authority" element={<AuthorityDashboard />} />
+            <Route path="/authority" element={<AuthorityReports />} />
+            <Route path="/authority/feed" element={<AuthorityFeed />} />
+            <Route path="/authority/merged" element={<AuthorityMerged />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>

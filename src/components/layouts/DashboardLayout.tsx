@@ -1,8 +1,7 @@
 import { ReactNode } from "react";
 import { Link } from "react-router-dom";
 import {
-  Building2, Search, Bell, LogOut, LayoutDashboard,
-  ClipboardList,
+  Building2, Bell, LogOut, FileText, Activity, ClipboardList,
 } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { useUnreadCount } from "@/hooks/useNotifications";
@@ -29,8 +28,9 @@ interface DashboardLayoutProps {
 }
 
 const authorityNavItems = [
-  { to: "/authority", label: "Dashboard", icon: LayoutDashboard },
-  { to: "/issues", label: "Explore Issues", icon: Search },
+  { to: "/authority", label: "Reports", icon: FileText },
+  { to: "/authority/feed", label: "Live Feed", icon: Activity },
+  { to: "/authority/merged", label: "Merged Issues", icon: ClipboardList },
 ];
 
 function DashboardSidebar() {
