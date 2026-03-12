@@ -155,9 +155,11 @@ export default function AdminIssueReview() {
   // Auth guard
   if (authLoading) {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
-        <Skeleton className="h-8 w-48" />
-      </div>
+      <DashboardLayout>
+        <div className="flex items-center justify-center py-20">
+          <Skeleton className="h-8 w-48" />
+        </div>
+      </DashboardLayout>
     );
   }
 
