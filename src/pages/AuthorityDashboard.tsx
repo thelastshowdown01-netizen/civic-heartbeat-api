@@ -145,26 +145,17 @@ export default function AuthorityDashboard() {
             {Array.from({ length: 5 }).map((_, i) => <Skeleton key={i} className="h-24" />)}
           </div>
         </div>
-      </>
+      </DashboardLayout>
     );
   }
 
   return (
-    <>
-      <Navbar />
-      <main className="max-w-7xl mx-auto px-4 py-8 space-y-6">
-        {/* Header */}
-        <div className="flex items-center gap-3">
-          <div className="p-2 rounded-lg bg-primary/10">
-            <Building2 className="h-6 w-6 text-primary" />
-          </div>
-          <div>
-            <h1 className="text-2xl font-bold text-foreground">Department Work Queue</h1>
-            <p className="text-sm text-muted-foreground">
-              Manage assigned civic issues, update progress, and move toward resolution.
-            </p>
-          </div>
-        </div>
+    <DashboardLayout title="Department Work Queue" icon={<Building2 className="h-5 w-5" />}>
+      <div className="space-y-6">
+        {/* Subtitle */}
+        <p className="text-sm text-muted-foreground">
+          Manage assigned civic issues, update progress, and move toward resolution.
+        </p>
 
         {/* Stats */}
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
