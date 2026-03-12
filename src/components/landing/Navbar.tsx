@@ -18,8 +18,13 @@ const Navbar = () => {
           <a href="#how-it-works" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors hidden sm:inline">
             How It Works
           </a>
-          {loading ? null : user ? (
+           {loading ? null : user ? (
             <>
+              {userRole === "admin" && (
+                <Link to="/admin" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors hidden sm:inline">
+                  Admin
+                </Link>
+              )}
               <span className="text-xs text-muted-foreground hidden md:inline border border-border rounded-full px-2 py-0.5">
                 {userRole}
               </span>
