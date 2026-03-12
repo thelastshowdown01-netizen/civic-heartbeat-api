@@ -66,12 +66,12 @@ export default function AuthorityReports() {
             {Array.from({ length: 3 }).map((_, i) => <Skeleton key={i} className="h-28" />)}
           </div>
         </div>
-      </DashboardLayout>
+      </PublicLayout>
     );
   }
 
   return (
-    <DashboardLayout title="Reports" icon={<FileText className="h-5 w-5" />}>
+    <PublicLayout>
       <div className="space-y-6">
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <StatCard
