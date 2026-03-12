@@ -134,7 +134,7 @@ export type Database = {
           is_read: boolean
           issue_id: string | null
           message: string
-          type: string | null
+          type: Database["public"]["Enums"]["notification_type"] | null
           user_id: string
         }
         Insert: {
@@ -143,7 +143,7 @@ export type Database = {
           is_read?: boolean
           issue_id?: string | null
           message: string
-          type?: string | null
+          type?: Database["public"]["Enums"]["notification_type"] | null
           user_id: string
         }
         Update: {
@@ -152,7 +152,7 @@ export type Database = {
           is_read?: boolean
           issue_id?: string | null
           message?: string
-          type?: string | null
+          type?: Database["public"]["Enums"]["notification_type"] | null
           user_id?: string
         }
         Relationships: [
@@ -332,6 +332,14 @@ export type Database = {
         | "in_progress"
         | "resolved"
         | "rejected"
+      notification_type:
+        | "issue_created"
+        | "issue_verified"
+        | "authority_assigned"
+        | "status_changed"
+        | "issue_resolved"
+        | "issue_rejected"
+        | "duplicate_linked"
       priority_label: "low" | "medium" | "high"
       vote_type: "up" | "down"
     }
@@ -478,6 +486,15 @@ export const Constants = {
         "in_progress",
         "resolved",
         "rejected",
+      ],
+      notification_type: [
+        "issue_created",
+        "issue_verified",
+        "authority_assigned",
+        "status_changed",
+        "issue_resolved",
+        "issue_rejected",
+        "duplicate_linked",
       ],
       priority_label: ["low", "medium", "high"],
       vote_type: ["up", "down"],
