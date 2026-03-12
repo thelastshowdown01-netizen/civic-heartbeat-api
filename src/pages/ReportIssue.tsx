@@ -1,0 +1,104 @@
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { GitMerge, BarChart3, UserCheck, Eye } from "lucide-react";
+import { useAuth } from "@/hooks/useAuth";
+import { Card, CardContent } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import ReportForm from "@/components/report/ReportForm";
+import SubmissionSuccess from "@/components/report/SubmissionSuccess";
+
+const steps = [
+  { icon: GitMerge, label: "Similar issues merged", desc: "Duplicate reports are combined automatically." },
+  { icon: BarChart3, label: "Priority calculated", desc: "Urgent problems surface faster based on reports and votes." },
+  { icon: UserCheck, label: "Authority assigned", desc: "The right department gets notified." },
+  { icon: Eye, label: "Track progress", desc: "Follow status updates from report to resolution." },
+];
+
+interface SubmissionResult {
+  action_taken: "created_new_issue" | "attached_to_existing_issue";
+  issue_id: string;
+  duplicate_match_reason?: string | null;
+}
+
+const ReportIssue = () => {
+  const { user, loading } = useAuth();
+  const navigate = useNavigate();
+  const [result, setResult] = useState<SubmissionResult | null>(null);
+
+  useEffect(() => {
+    if (!loading && !user) {
+      navigate("/login?redirect=/report", { replace: true });
+    }
+  }, [loading, user, navigate]);
+
+  if (loading) return null;
+  if (!user) return null;
+
+  if (result) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center px-4 py-16">
+        <SubmissionSuccess
+          actionTaken={result.action_taken}
+          issueId={result.issue_id}
+          matchReason={result.duplicate_match_reason}
+          onReportAnother={() => setResult(null)}
+        />
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-background">
+      <div className="max-w-6xl mx-auto px-4 py-12 md:py-16">
+        {/* Header */}
+        <div className="mb-10 max-w-2xl">
+          <h1 className="text-3xl md:text-4xl font-bold text-foreground tracking-tight">Report a Civic Issue</h1>
+          <p className="mt-2 text-muted-foreground text-lg">Help improve your city — it takes under a minute.</p>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
+          {/* Form column */}
+          <div className="lg:col-span-2">
+            <Card>
+              <CardContent className="p-6 md:p-8">
+                <ReportForm onSuccess={setResult} />
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Info panel */}
+          <div className="hidden lg:block">
+            <div className="sticky top-8 space-y-6">
+              <Card>
+                <CardContent className="p-6 space-y-5">
+                  <h3 className="font-semibold text-foreground">What happens next?</h3>
+                  <div className="space-y-4">
+                    {steps.map((step, i) => (
+                      <div key={i} className="flex gap-3">
+                        <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
+                          <step.icon className="w-4 h-4 text-primary" />
+                        </div>
+                        <div>
+                          <p className="text-sm font-medium text-foreground">{step.label}</p>
+                          <p className="text-xs text-muted-foreground">{step.desc}</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+
+              <div className="flex flex-wrap gap-2">
+                <Badge variant="secondary" className="text-xs">Similar reports merged automatically</Badge>
+                <Badge variant="secondary" className="text-xs">Urgent issues prioritized faster</Badge>
+                <Badge variant="secondary" className="text-xs">Status updates stay visible</Badge>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default ReportIssue;
