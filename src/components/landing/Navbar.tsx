@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 
 const Navbar = () => {
   const { user, loading, signOut, userRole } = useAuth();
+  const { data: unreadCount } = useUnreadCount();
 
   return (
     <nav className="sticky top-0 z-50 border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
