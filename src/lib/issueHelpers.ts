@@ -30,3 +30,13 @@ export function formatCategory(cat: string): string {
 export function formatStatus(status: string): string {
   return status.replace(/_/g, " ").replace(/\b\w/g, (l) => l.toUpperCase());
 }
+
+export const categoryIcons: Record<string, string> = {
+  pothole: "🕳️",
+  garbage: "🗑️",
+  sewer_overflow: "🚰",
+  water_leakage: "💧",
+  street_light: "💡",
+  road_damage: "🚧",
+  other: "📋",
+};
