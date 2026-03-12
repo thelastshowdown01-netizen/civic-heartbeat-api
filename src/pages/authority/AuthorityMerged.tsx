@@ -161,6 +161,6 @@ export default function AuthorityMerged() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
-    </DashboardLayout>
+    </PublicLayout>
   );
 }

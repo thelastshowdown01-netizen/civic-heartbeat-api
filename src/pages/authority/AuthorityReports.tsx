@@ -126,6 +126,6 @@ export default function AuthorityReports() {
           </CardContent>
         </Card>
       </div>
-    </DashboardLayout>
+    </PublicLayout>
   );
 }

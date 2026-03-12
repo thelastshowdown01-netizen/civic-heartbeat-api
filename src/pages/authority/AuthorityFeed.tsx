@@ -225,6 +225,6 @@ export default function AuthorityFeed() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
-    </DashboardLayout>
+    </PublicLayout>
   );
 }
