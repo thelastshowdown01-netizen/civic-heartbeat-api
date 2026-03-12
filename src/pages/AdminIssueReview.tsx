@@ -22,6 +22,7 @@ import {
   formatCategory, formatStatus, statusColors, priorityColors,
 } from "@/lib/issueHelpers";
 import StatusTimeline from "@/components/issues/StatusTimeline";
+import DashboardLayout from "@/components/layouts/DashboardLayout";
 
 const categoryIcons: Record<string, string> = {
   pothole: "🕳️", garbage: "🗑️", sewer_overflow: "🚰", water_leakage: "💧",
