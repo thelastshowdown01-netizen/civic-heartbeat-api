@@ -7,7 +7,7 @@ export function useTrendingIssues(limit = 5) {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("issues")
-        .select("id, title, category, priority, priority_score, upvotes_count, reports_count, status, pincode, created_at")
+        .select("id, title, description, category, priority, priority_score, upvotes_count, reports_count, status, pincode, created_at")
         .not("status", "in", '("resolved","rejected")')
         .order("priority_score", { ascending: false })
         .limit(limit);
