@@ -42,7 +42,7 @@ Deno.serve(async (req) => {
         email: u.email,
         password: u.password,
         email_confirm: true,
-        user_metadata: { full_name: u.name },
+        user_metadata: { full_name: u.name, role: u.role },
       });
       if (authErr) {
         console.error(`Failed to create user ${u.email}:`, authErr.message);
@@ -50,11 +50,6 @@ Deno.serve(async (req) => {
       }
       const uid = authData.user.id;
       userIds[u.email] = uid;
-
-      // handle_new_user trigger creates citizen role + profile automatically
-      if (u.role !== "citizen") {
-        await admin.from("user_roles").insert({ user_id: uid, role: u.role });
-      }
     }
 
     const citizen1 = userIds["citizen1@demo.sustaincity.in"];
