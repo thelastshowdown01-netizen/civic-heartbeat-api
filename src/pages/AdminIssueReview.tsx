@@ -178,7 +178,7 @@ export default function AdminIssueReview() {
 
   if (issueLoading) {
     return (
-      <DashboardLayout>
+      <DashboardLayout title="Loading Issue...">
         <div className="max-w-6xl mx-auto">
           <Skeleton className="h-6 w-40 mb-6" />
           <Skeleton className="h-10 w-3/4 mb-4" />
