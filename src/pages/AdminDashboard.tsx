@@ -5,7 +5,7 @@ import { Shield, Filter, ArrowUpDown } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
-import Navbar from "@/components/landing/Navbar";
+import DashboardLayout from "@/components/layouts/DashboardLayout";
 import AdminStatsCards from "@/components/admin/AdminStatsCards";
 import AdminIssueTable from "@/components/admin/AdminIssueTable";
 import AdminActionDialog from "@/components/admin/AdminActionDialog";
