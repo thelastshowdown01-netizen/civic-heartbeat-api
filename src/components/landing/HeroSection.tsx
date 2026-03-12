@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
+import { useDemo } from "@/hooks/useDemo";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
@@ -46,6 +47,7 @@ const trustChips = [
 
 const HeroSection = () => {
   const { user } = useAuth();
+  const { activateDemo } = useDemo();
 
   return (
     <section className="relative max-w-6xl mx-auto px-4 py-20 md:py-28">
@@ -83,11 +85,9 @@ const HeroSection = () => {
                 </Button>
               </Link>
             )}
-            <a href="#issues">
-              <Button variant="outline" size="lg" className="gap-2 text-base px-8">
-                Explore Issues <ChevronDown className="h-4 w-4" />
-              </Button>
-            </a>
+            <Button variant="outline" size="lg" className="gap-2 text-base px-8" onClick={activateDemo}>
+              Try Live Demo <ArrowRight className="h-4 w-4" />
+            </Button>
           </div>
 
           <div className="flex flex-wrap justify-center md:justify-start gap-2">
