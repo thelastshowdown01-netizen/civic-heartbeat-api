@@ -118,6 +118,8 @@ const ReportForm = ({ onSuccess }: ReportFormProps) => {
       });
 
       if (error) throw error;
+      queryClient.invalidateQueries({ queryKey: ["issue-feed"] });
+      queryClient.invalidateQueries({ queryKey: ["my-reports"] });
       onSuccess(data as SubmissionResult);
     } catch (err: any) {
       form.setError("root", { message: err.message || "Something went wrong. Please try again." });

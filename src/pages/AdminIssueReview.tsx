@@ -685,7 +685,7 @@ export default function AdminIssueReview() {
             </Card>
           </div>
         </div>
-      </main>
-    </div>
+      </div>
+    </DashboardLayout>
   );
 }
