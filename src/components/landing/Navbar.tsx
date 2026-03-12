@@ -20,6 +20,9 @@ const Navbar = () => {
           </a>
            {loading ? null : user ? (
             <>
+              <Link to="/dashboard" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors hidden sm:inline">
+                My Reports
+              </Link>
               {userRole === "admin" && (
                 <Link to="/admin" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors hidden sm:inline">
                   Admin
