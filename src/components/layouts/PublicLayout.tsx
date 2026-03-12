@@ -23,13 +23,11 @@ const PublicLayout = ({ children, fullWidth }: PublicLayoutProps) => {
   const [mobileOpen, setMobileOpen] = useState(false);
 
   const publicLinks = [
-    { to: "/", label: "Home" },
     { to: "/issues", label: "Explore Issues" },
     { to: "/report", label: "Report an Issue" },
   ];
 
   const citizenLinks = [
-    { to: "/", label: "Home" },
     { to: "/issues", label: "Explore Issues" },
     { to: "/report", label: "Report an Issue" },
     { to: "/dashboard", label: "My Reports" },
