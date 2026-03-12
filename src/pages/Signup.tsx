@@ -6,16 +6,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { toast } from "sonner";
-import { Eye, EyeOff, User, Shield, Building2 } from "lucide-react";
+import { Eye, EyeOff } from "lucide-react";
 import AuthLayout from "@/components/auth/AuthLayout";
-
-type Role = "citizen" | "admin" | "authority";
-
-const roles: { value: Role; label: string; icon: typeof User; desc: string }[] = [
-  { value: "citizen", label: "Citizen", icon: User, desc: "Report & track issues" },
-  { value: "admin", label: "Admin", icon: Shield, desc: "Manage & verify issues" },
-  { value: "authority", label: "Authority", icon: Building2, desc: "Resolve assigned issues" },
-];
 
 const Signup = () => {
   const [email, setEmail] = useState("");
@@ -25,7 +17,6 @@ const Signup = () => {
   const [pincode, setPincode] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [selectedRole, setSelectedRole] = useState<Role>("citizen");
   const navigate = useNavigate();
 
   const handleSignup = async (e: React.FormEvent) => {
@@ -45,7 +36,7 @@ const Signup = () => {
       email,
       password,
       options: {
-        data: { full_name: fullName, pincode: pincode || undefined, role: selectedRole },
+        data: { full_name: fullName, pincode: pincode || undefined, role: "citizen" },
         emailRedirectTo: window.location.origin,
       },
     });
@@ -67,32 +58,6 @@ const Signup = () => {
         </CardHeader>
         <form onSubmit={handleSignup}>
           <CardContent className="space-y-4">
-            {/* Role Selection */}
-            <div className="space-y-2">
-              <Label>Sign up as</Label>
-              <div className="grid grid-cols-3 gap-2">
-                {roles.map((role) => {
-                  const Icon = role.icon;
-                  const isSelected = selectedRole === role.value;
-                  return (
-                    <button
-                      key={role.value}
-                      type="button"
-                      onClick={() => setSelectedRole(role.value)}
-                      className={`flex flex-col items-center gap-1 rounded-lg border-2 p-3 text-center transition-all ${
-                        isSelected
-                          ? "border-primary bg-primary/10 text-primary"
-                          : "border-border bg-background text-muted-foreground hover:border-primary/40"
-                      }`}
-                    >
-                      <Icon className="h-5 w-5" />
-                      <span className="text-sm font-medium">{role.label}</span>
-                      <span className="text-[10px] leading-tight opacity-70">{role.desc}</span>
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
             <div className="space-y-2">
               <Label htmlFor="name">Full Name</Label>
               <Input id="name" value={fullName} onChange={(e) => setFullName(e.target.value)} required placeholder="Your name" />
@@ -121,7 +86,7 @@ const Signup = () => {
           </CardContent>
           <CardFooter className="flex flex-col gap-3">
             <Button type="submit" className="w-full" disabled={loading}>
-              {loading ? "Creating account..." : `Sign Up as ${roles.find((r) => r.value === selectedRole)?.label}`}
+              {loading ? "Creating account..." : "Sign Up"}
             </Button>
             <Link to="/login" className="text-sm text-primary hover:underline">Already have an account? Sign in</Link>
           </CardFooter>
