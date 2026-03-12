@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { format } from "date-fns";
-import { MoreHorizontal, Eye, CheckCircle, UserPlus, Play, XCircle, Award } from "lucide-react";
+import { MoreHorizontal, Eye, CheckCircle, UserPlus, Play, XCircle, Award, SearchX } from "lucide-react";
+import { EmptyState } from "@/components/ui/empty-state";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
