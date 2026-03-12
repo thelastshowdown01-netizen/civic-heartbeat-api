@@ -59,7 +59,7 @@ export default function AuthorityReports() {
 
   if (authLoading || (!user && !authLoading)) {
     return (
-      <DashboardLayout title="Reports" icon={<FileText className="h-5 w-5" />}>
+      <PublicLayout>
         <div className="space-y-6">
           <Skeleton className="h-10 w-64" />
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
