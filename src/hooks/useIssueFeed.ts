@@ -16,10 +16,6 @@ export type FeedFilters = {
   page?: number;
   pageSize?: number;
 };
-  sortBy?: "recent" | "priority" | "upvoted" | "reported";
-  page?: number;
-  pageSize?: number;
-};
 
 const SORT_MAP: Record<string, { column: string; ascending: boolean }> = {
   recent: { column: "created_at", ascending: false },
