@@ -65,6 +65,18 @@ const Login = () => {
           </CardFooter>
         </form>
       </Card>
+      <Card className="w-full max-w-md border-border/50 shadow-sm mt-4">
+        <CardHeader className="text-center pb-3">
+          <CardDescription className="text-xs uppercase tracking-wide">Quick Demo Access</CardDescription>
+        </CardHeader>
+        <CardContent className="flex gap-2 justify-center pb-4">
+          {(["citizen", "admin", "authority"] as const).map((role) => (
+            <Button key={role} variant="outline" size="sm" className="text-xs capitalize" onClick={() => { sessionStorage.setItem("demo_mode", "true"); switchRole(role); }}>
+              {role}
+            </Button>
+          ))}
+        </CardContent>
+      </Card>
     </AuthLayout>
   );
 };

@@ -85,11 +85,9 @@ const HeroSection = () => {
                 </Button>
               </Link>
             )}
-            <a href="#issues">
-              <Button variant="outline" size="lg" className="gap-2 text-base px-8">
-                Explore Issues <ChevronDown className="h-4 w-4" />
-              </Button>
-            </a>
+            <Button variant="outline" size="lg" className="gap-2 text-base px-8" onClick={activateDemo}>
+              Try Live Demo <ArrowRight className="h-4 w-4" />
+            </Button>
           </div>
 
           <div className="flex flex-wrap justify-center md:justify-start gap-2">
