@@ -37,8 +37,10 @@ Deno.serve(async (req) => {
       { global: { headers: { Authorization: authHeader } } }
     );
 
-    const { data: { user } } = await supabase.auth.getUser();
-    if (!user) return json({ error: "Unauthorized" }, 401);
+    const token = authHeader.replace("Bearer ", "");
+    const { data: claimsData, error: claimsError } = await supabase.auth.getClaims(token);
+    if (claimsError || !claimsData?.claims) return json({ error: "Unauthorized" }, 401);
+    const userId = claimsData.claims.sub as string;
 
     const adminClient = createClient(
       Deno.env.get("SUPABASE_URL")!,
@@ -49,7 +51,7 @@ Deno.serve(async (req) => {
     const { data: roles } = await adminClient
       .from("user_roles")
       .select("role")
-      .eq("user_id", user.id);
+      .eq("user_id", userId);
 
     const userRoles = roles?.map((r) => r.role) || [];
     const isAuthority = userRoles.includes("authority");
@@ -113,7 +115,7 @@ Deno.serve(async (req) => {
     if (effectiveStatus) {
       await adminClient.from("status_logs").insert({
         issue_id,
-        changed_by_id: user.id,
+        changed_by_id: userId,
         old_status: issue.status,
         new_status: effectiveStatus,
         comment: comment || null,

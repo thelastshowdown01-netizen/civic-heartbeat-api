@@ -53,13 +53,15 @@ Deno.serve(async (req) => {
       { global: { headers: { Authorization: authHeader } } }
     );
 
-    const { data: { user } } = await supabase.auth.getUser();
-    if (!user) {
+    const token = authHeader.replace("Bearer ", "");
+    const { data: claimsData, error: claimsError } = await supabase.auth.getClaims(token);
+    if (claimsError || !claimsData?.claims) {
       return new Response(JSON.stringify({ error: "Unauthorized" }), {
         status: 401,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
+    const userId = claimsData.claims.sub as string;
 
     const { issue_id, vote_type } = await req.json();
 
@@ -79,7 +81,7 @@ Deno.serve(async (req) => {
     const { data: existingVote } = await adminClient
       .from("votes")
       .select("vote_type")
-      .eq("user_id", user.id)
+      .eq("user_id", userId)
       .eq("issue_id", issue_id)
       .maybeSingle();
 
@@ -111,7 +113,7 @@ Deno.serve(async (req) => {
         await adminClient
           .from("votes")
           .delete()
-          .eq("user_id", user.id)
+          .eq("user_id", userId)
           .eq("issue_id", issue_id);
         userVote = null;
       } else {
@@ -121,7 +123,7 @@ Deno.serve(async (req) => {
         await adminClient
           .from("votes")
           .update({ vote_type })
-          .eq("user_id", user.id)
+          .eq("user_id", userId)
           .eq("issue_id", issue_id);
         userVote = vote_type;
       }
@@ -130,7 +132,7 @@ Deno.serve(async (req) => {
       if (vote_type === "up") upvotes++;
       else downvotes++;
       await adminClient.from("votes").insert({
-        user_id: user.id,
+        user_id: userId,
         issue_id,
         vote_type,
       });
