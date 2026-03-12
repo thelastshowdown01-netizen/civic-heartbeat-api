@@ -5,6 +5,9 @@ import {
   Bell, BellOff, CheckCheck, Filter, Info, ShieldCheck, UserCheck,
   ArrowRight, RefreshCw, XCircle, Activity, CheckCircle2, Plus,
 } from "lucide-react";
+import { PageHeader } from "@/components/ui/page-header";
+import { StatCard } from "@/components/ui/stat-card";
+import { EmptyState } from "@/components/ui/empty-state";
 import { useAuth } from "@/hooks/useAuth";
 import {
   useNotifications,
