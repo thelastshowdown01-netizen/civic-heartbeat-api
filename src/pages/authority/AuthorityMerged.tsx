@@ -93,11 +93,11 @@ export default function AuthorityMerged() {
 
   if (authLoading || (!user && !authLoading)) {
     return (
-      <DashboardLayout title="Merged Issues" icon={<ClipboardList className="h-5 w-5" />}>
+      <PublicLayout>
         <div className="space-y-3">
           {Array.from({ length: 3 }).map((_, i) => <Skeleton key={i} className="h-32" />)}
         </div>
-      </DashboardLayout>
+      </PublicLayout>
     );
   }
 
