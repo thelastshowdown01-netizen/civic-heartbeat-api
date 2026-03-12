@@ -336,6 +336,6 @@ export default function AdminDashboard() {
         onConfirm={handleDialogConfirm}
         loading={actionLoading}
       />
-    </>
+    </DashboardLayout>
   );
 }

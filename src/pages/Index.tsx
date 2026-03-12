@@ -1,4 +1,4 @@
-import Navbar from "@/components/landing/Navbar";
+import PublicLayout from "@/components/layouts/PublicLayout";
 import HeroSection from "@/components/landing/HeroSection";
 import FeaturesSection from "@/components/landing/FeaturesSection";
 import DashboardPreview from "@/components/landing/DashboardPreview";
@@ -10,8 +10,7 @@ import FooterCTA from "@/components/landing/FooterCTA";
 
 const Index = () => {
   return (
-    <div className="min-h-screen bg-background">
-      <Navbar />
+    <PublicLayout fullWidth>
       <HeroSection />
       <FeaturesSection />
       <DashboardPreview />
@@ -20,7 +19,7 @@ const Index = () => {
       <HowItWorksSection />
       <TrustSection />
       <FooterCTA />
-    </div>
+    </PublicLayout>
   );
 };
 

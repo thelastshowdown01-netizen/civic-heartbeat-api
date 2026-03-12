@@ -416,7 +416,7 @@ export default function IssueDetails() {
             </Card>
           </div>
         </div>
-      </main>
-    </div>
+      </div>
+    </PublicLayout>
   );
 }

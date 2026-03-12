@@ -369,6 +369,6 @@ export default function AuthorityDashboard() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
-    </>
+    </DashboardLayout>
   );
 }

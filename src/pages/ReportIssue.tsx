@@ -6,6 +6,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import ReportForm from "@/components/report/ReportForm";
 import SubmissionSuccess from "@/components/report/SubmissionSuccess";
+import PublicLayout from "@/components/layouts/PublicLayout";
 
 const steps = [
   { icon: GitMerge, label: "Similar issues merged", desc: "Duplicate reports are combined automatically." },

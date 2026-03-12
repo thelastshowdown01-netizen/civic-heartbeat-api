@@ -250,8 +250,8 @@ const Notifications = () => {
             {renderGroup("Earlier", grouped.earlier)}
           </div>
         )}
-      </main>
-    </div>
+      </div>
+    </PublicLayout>
   );
 };
 

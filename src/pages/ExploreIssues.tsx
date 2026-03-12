@@ -298,7 +298,7 @@ export default function ExploreIssues() {
             </div>
           </div>
         )}
-      </main>
-    </div>
+      </div>
+    </PublicLayout>
   );
 }

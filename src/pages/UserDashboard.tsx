@@ -306,8 +306,8 @@ export default function UserDashboard() {
             </Card>
           </div>
         </div>
-      </main>
-    </>
+      </div>
+    </PublicLayout>
   );
 }
 
