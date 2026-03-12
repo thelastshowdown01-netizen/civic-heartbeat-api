@@ -3,8 +3,35 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers":
-    "authorization, x-client-info, apikey, content-type",
+    "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
+
+const CATEGORY_WEIGHTS: Record<string, number> = {
+  sewer_overflow: 50, road_damage: 40, water_leakage: 35,
+  street_light: 25, pothole: 20, garbage: 15, other: 10,
+};
+
+const SEVERITY_KEYWORDS = [
+  "dangerous", "hazard", "urgent", "emergency", "collapse",
+  "flood", "accident", "injury", "blocked", "overflow",
+];
+
+function calculatePriority(
+  category: string,
+  description: string,
+  title: string | null,
+  reportsCount: number,
+  upvotes: number,
+  downvotes: number,
+): { score: number; label: string } {
+  let score = CATEGORY_WEIGHTS[category] || 10;
+  const text = ((title || "") + " " + description).toLowerCase();
+  if (SEVERITY_KEYWORDS.some((kw) => text.includes(kw))) score += 25;
+  score += reportsCount * 5;
+  score += upvotes * 2;
+  score -= downvotes;
+  return { score, label: score > 75 ? "high" : score > 40 ? "medium" : "low" };
+}
 
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") {
@@ -26,9 +53,7 @@ Deno.serve(async (req) => {
       { global: { headers: { Authorization: authHeader } } }
     );
 
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
+    const { data: { user } } = await supabase.auth.getUser();
     if (!user) {
       return new Response(JSON.stringify({ error: "Unauthorized" }), {
         status: 401,
@@ -37,7 +62,6 @@ Deno.serve(async (req) => {
     }
 
     const { issue_id, vote_type } = await req.json();
-    // vote_type: "up", "down", or "remove"
 
     if (!issue_id) {
       return new Response(JSON.stringify({ error: "issue_id required" }), {
@@ -59,10 +83,10 @@ Deno.serve(async (req) => {
       .eq("issue_id", issue_id)
       .maybeSingle();
 
-    // Get current issue counts
+    // Get current issue
     const { data: issue } = await adminClient
       .from("issues")
-      .select("upvotes_count, downvotes_count, category, description, reports_count")
+      .select("upvotes_count, downvotes_count, category, description, title, reports_count")
       .eq("id", issue_id)
       .single();
 
@@ -75,6 +99,7 @@ Deno.serve(async (req) => {
 
     let upvotes = issue.upvotes_count;
     let downvotes = issue.downvotes_count;
+    let userVote: string | null = null;
 
     if (existingVote) {
       // Remove old vote effect
@@ -82,12 +107,13 @@ Deno.serve(async (req) => {
       else downvotes--;
 
       if (vote_type === "remove" || vote_type === existingVote.vote_type) {
-        // Remove vote entirely
+        // Remove vote entirely (toggle off)
         await adminClient
           .from("votes")
           .delete()
           .eq("user_id", user.id)
           .eq("issue_id", issue_id);
+        userVote = null;
       } else {
         // Change vote
         if (vote_type === "up") upvotes++;
@@ -97,6 +123,7 @@ Deno.serve(async (req) => {
           .update({ vote_type })
           .eq("user_id", user.id)
           .eq("issue_id", issue_id);
+        userVote = vote_type;
       }
     } else if (vote_type !== "remove") {
       // New vote
@@ -107,18 +134,14 @@ Deno.serve(async (req) => {
         issue_id,
         vote_type,
       });
+      userVote = vote_type;
     }
 
-    // Recalculate priority
-    const CATEGORY_WEIGHTS: Record<string, number> = {
-      sewer_overflow: 50, road_damage: 40, water_leakage: 35,
-      street_light: 25, pothole: 20, garbage: 15, other: 10,
-    };
-    let score = CATEGORY_WEIGHTS[issue.category] || 10;
-    score += issue.reports_count * 5;
-    score += upvotes * 2;
-    score -= downvotes;
-    const label = score > 75 ? "high" : score > 40 ? "medium" : "low";
+    // Recalculate priority with severity keywords
+    const { score, label } = calculatePriority(
+      issue.category, issue.description, issue.title,
+      issue.reports_count, upvotes, downvotes,
+    );
 
     await adminClient
       .from("issues")
@@ -131,7 +154,14 @@ Deno.serve(async (req) => {
       .eq("id", issue_id);
 
     return new Response(
-      JSON.stringify({ success: true, upvotes_count: upvotes, downvotes_count: downvotes }),
+      JSON.stringify({
+        success: true,
+        upvotes_count: upvotes,
+        downvotes_count: downvotes,
+        priority_score: score,
+        priority: label,
+        user_vote: userVote,
+      }),
       { headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
   } catch (err) {
